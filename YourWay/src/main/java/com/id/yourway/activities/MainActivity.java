@@ -143,9 +143,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
         }
         fragment.setArguments(args);
-        FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-                .commit();
 
         mDrawerList.setItemChecked(possition, true);
         setTitle(dataList.get(possition).getItemName());
