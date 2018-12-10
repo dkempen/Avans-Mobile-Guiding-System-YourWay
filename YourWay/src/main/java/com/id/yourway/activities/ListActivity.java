@@ -7,6 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.id.yourway.R;
+import com.id.yourway.adapters.SightListAdapter;
+import com.id.yourway.entities.Sight;
+import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
 import java.util.List;
