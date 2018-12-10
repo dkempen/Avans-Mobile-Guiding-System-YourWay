@@ -12,12 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.fragments.MapFragment;
@@ -31,6 +25,10 @@ public class MainActivity extends AppCompatActivity  {
 
     private static MainActivity instance;
 
+    public static MainActivity getInstance() {
+        return instance;
+    }
+
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity  {
     CustomDrawerAdapter adapter;
 
     List<DrawerItem> dataList;
-    private GoogleMap mMap;
     private MapFragment mapFragment;
     private android.support.v4.app.FragmentManager fragmentManager;
 
