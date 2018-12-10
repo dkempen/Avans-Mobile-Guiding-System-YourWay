@@ -30,7 +30,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.ListActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,7 @@
         <activity
             android:name=".activities.PreferencesActivity"
             android:label="@string/title_activity_preferences" />
-        <activity android:name=".activities.ListActivity"></activity>
+        <activity android:name=".activities.MainActivity"></activity>
     </application>
 
 </manifest>
