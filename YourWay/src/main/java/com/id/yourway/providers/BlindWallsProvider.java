@@ -30,12 +30,52 @@ public class BlindWallsProvider implements SightProvider {
                     @Override
                     public void onRequestObjectAvailible(JSONObject response) {
                         List<Sight> sights = new ArrayList<>();
+
+                        try {
+                            JSONArray array = response.getJSONArray("response");
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject wall = array.getJSONObject(i);
+
+                                int id = wall.getInt("id");
+                                long date = wall.getLong("date");
+                                double latitude = wall.getDouble("latitude");
+                                double longitude = wall.getDouble("longitude");
+                                String address = wall.getString("address");
+                                String videoUrl = wall.getString("videoUrl");
+                                String photographer = wall.getString("photographer");
+                                String author = wall.getString("author");
+                                String titleNL = wall.getJSONObject("title").getString("nl");
+                                String titleEN = wall.getJSONObject("title").getString("en");
+                                String descriptionNL = wall.getJSONObject("description").getString("en");
+                                String descriptionEN = wall.getJSONObject("description").getString("en");
+                                String materialNL = wall.getJSONObject("material").getString("en");
+                                String materialEN = wall.getJSONObject("material").getString("en");
+                                String catogoryNL = wall.getJSONObject("category").getString("en");
+                                String catogoryEN = wall.getJSONObject("category").getString("en");
+
+                                JSONArray imagesArray = wall.getJSONArray("images");
+                                List<String> images = new ArrayList<>();
+
+                                for (int j = 0; j < imagesArray.length(); j++) {
+                                    JSONObject image = imagesArray.getJSONObject(j);
+                                    images.add("https://api.blindwalls.gallery/" + image.getString("url"));
+                                }
+
+                                sights.add(new Sight(id, date, latitude, longitude, address, videoUrl,
+                                        photographer, author, titleNL, titleEN, descriptionNL, descriptionEN,
+                                        materialNL, materialEN, catogoryNL, catogoryEN, images));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         listener.onSightsAvailable(sights);
                     }
 
                     @Override
                     public void onRequestError(VolleyError error) {
-
+                        // TODO: Error handling of BlindWallsAPI
                     }
                 }, false);
     }

@@ -23,16 +23,16 @@ public class GoogleDirectionsProvider implements DirectionsProvider {
 
     @Override
     public void queueDirectionsRequest(DirectionsProviderListener listener) {
-            restProvider.getRequest(BASE_URL + "", new RestProviderListener() {
-                @Override
-                public void onRequestObjectAvailible(JSONObject response, RestResponseType restResponseType) {
-
-                }
-
-                @Override
-                public void onRequestError(VolleyError error, RestResponseType restResponseType) {
-
-                }
-            },);
+//            restProvider.getRequest(BASE_URL + "", new RestProviderListener() {
+//                @Override
+//                public void onRequestObjectAvailible(JSONObject response, RestResponseType restResponseType) {
+//
+//                }
+//
+//                @Override
+//                public void onRequestError(VolleyError error, RestResponseType restResponseType) {
+//
+//                }
+//            },);
     }
 }
