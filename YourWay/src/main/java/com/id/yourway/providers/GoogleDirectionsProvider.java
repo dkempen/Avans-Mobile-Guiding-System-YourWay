@@ -11,7 +11,7 @@ public class GoogleDirectionsProvider implements DirectionsProvider {
     private RestProvider restProvider;
 
     public GoogleDirectionsProvider(Context context) {
-        restProvider = new RestProvider();
+        //restProvider = new RestProvider();
         //context.getResources().getString()
     }
 
