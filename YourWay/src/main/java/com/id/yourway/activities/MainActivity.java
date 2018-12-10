@@ -28,7 +28,7 @@ import com.id.yourway.fragments.FragmentLayoutItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity  {
 
     private static MainActivity instance;
 
