@@ -4,9 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
+import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
 import com.id.yourway.fragments.FragmentLayoutItem;
 
@@ -28,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static MainActivity instance;
 
 
     private DrawerLayout mDrawerLayout;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     List<DrawerItem> dataList;
     private GoogleMap mMap;
+    private MapFragment mapFragment;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,25 +91,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dataList.add(new DrawerItem("Ïnstellingen", R.drawable.ic_launcher_foreground));
         dataList.add(new DrawerItem("Help", R.drawable.ic_launcher_foreground));
     }
+        instance = this;
+        fragmentManager = getSupportFragmentManager();
+        mapFragment = new MapFragment();
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
     }
 
     public void SelectItem(int possition) {
