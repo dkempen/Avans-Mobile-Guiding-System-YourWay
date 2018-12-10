@@ -3,6 +3,10 @@ package com.id.yourway.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,11 +24,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.id.yourway.R;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.entities.Sight;
@@ -103,6 +109,60 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
     }
 
+    public void removeMarkers() {
+        for(Marker marker : markerSightMap.keySet()) {
+            marker.remove();
+        }
+    }
+
+    public void addRide(final Sight sight) {
+        if(!sights.contains(sight)) {
+            sights.add(sight);
+            if (mMap == null)
+                runnables.add(new Runnable() {
+                    @Override
+                    public void run() {
+                        addRideInternal(sight);
+                    }
+                });
+            else {
+                addRideInternal(sight);
+            }
+
+            Log.i(TAG, "addRide: ");
+        }
+    }
+
+    private void addRideInternal(Sight sight) {
+        Bitmap bitmap = createBitMap(sight);
+        Marker marker = mMap.addMarker(new MarkerOptions().position(sight.getLatLng())
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                .anchor(0.5f, 0.5f));
+        markerSightMap.put(marker, sight);
+    }
+
+    private Bitmap createBitMap(Sight sight){
+        Paint marketPaint = new Paint();
+        marketPaint.setColor(Color.RED);
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+//        textPaint.setTextSize(40);
+
+        int px = getResources().getDisplayMetrics().widthPixels / 12;
+//        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+
+        Bitmap bitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888);
+        bitmap.prepareToDraw();
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, marketPaint);
+
+        int xPos = (canvas.getWidth() / 2);
+        int yPos = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2)) ;
+        return bitmap;
+    }
+
     public android.location.Location getGps() {
         LocationManager locationManager = (LocationManager) MainActivity.getInstance().getSystemService(LOCATION_SERVICE);
 
@@ -155,7 +215,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onLocationChanged(Location location) {
-
+        this.location = location;
     }
 
     @Override
