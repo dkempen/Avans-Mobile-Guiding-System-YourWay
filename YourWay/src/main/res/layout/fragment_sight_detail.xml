@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SightDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: Update blank fragment toolbar -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
