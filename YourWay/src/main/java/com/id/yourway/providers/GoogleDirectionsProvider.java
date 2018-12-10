@@ -2,7 +2,7 @@ package com.id.yourway.providers;
 
 import android.content.Context;
 
-import com.id.yourway.R;
+import com.id.yourway.providers.interfaces.DirectionsProvider;
 import com.id.yourway.providers.listeners.DirectionsProviderListener;
 
 public class GoogleDirectionsProvider implements DirectionsProvider {

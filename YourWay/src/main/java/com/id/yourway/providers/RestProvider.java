@@ -1,17 +1,12 @@
 package com.id.yourway.providers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.id.yourway.entities.RestResponseType;
-
-import org.json.JSONObject;
+import com.id.yourway.providers.listeners.RestProviderListener;
 
 public class RestProvider {
 
@@ -31,26 +26,13 @@ public class RestProvider {
         return Instance;
     }
 
-    public void getRequest(String url, final RestProviderListener listener, final RestResponseType restResponseType)
+    public void getRequest(String url, final RestProviderListener listener)
     {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response)
-                    {
-                        listener.onRequestObjectAvailible(response, restResponseType);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        listener.onRequestError(error, restResponseType);
-                    }
-                }
+                url, null,
+                listener::onRequestObjectAvailible,
+                listener::onRequestError
         );
         requestqueue.add(jsonObjectRequest);
     }
