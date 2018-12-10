@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     List<DrawerItem> dataList;
     private GoogleMap mMap;
     private MapFragment mapFragment;
-    private FragmentManager fragmentManager;
+    private android.support.v4.app.FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        instance = this;
+        fragmentManager = getSupportFragmentManager();
+        mapFragment = new MapFragment();
+
+        fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
         addItems();
 
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
@@ -91,12 +98,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         dataList.add(new DrawerItem("Ïnstellingen", R.drawable.ic_launcher_foreground));
         dataList.add(new DrawerItem("Help", R.drawable.ic_launcher_foreground));
     }
-        instance = this;
-        fragmentManager = getSupportFragmentManager();
-        mapFragment = new MapFragment();
 
-        fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
-    }
+
 
     public void SelectItem(int possition) {
 
