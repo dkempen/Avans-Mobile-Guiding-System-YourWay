@@ -23,14 +23,13 @@ import com.id.yourway.providers.listeners.SightProviderListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static MainActivity instance;
 
     public static MainActivity getInstance() {
         return instance;
     }
-
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -91,22 +90,23 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void updateSights(){
+    public void updateSights() {
         AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
             @Override
             public void onSightsAvailable(List<Sight> sights) {
                 setSights(sights);
+            }
+        });
     }
 
     public void setSights(List<Sight> sightslist) {
-                sights = sightslist;
+        sights = sightslist;
 
     }
 
     public List<Sight> getSights() {
         return sights;
     }
-
 
     private void addItems() {
         dataList.add(new DrawerItem("Kaart", R.drawable.ic_launcher_foreground));
@@ -115,8 +115,6 @@ public class MainActivity extends AppCompatActivity  {
         dataList.add(new DrawerItem("Ïnstellingen", R.drawable.ic_launcher_foreground));
         dataList.add(new DrawerItem("Help", R.drawable.ic_launcher_foreground));
     }
-
-
 
     public void SelectItem(int possition) {
 
@@ -166,7 +164,6 @@ public class MainActivity extends AppCompatActivity  {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -178,10 +175,8 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
-        }
-
         return false;
     }
 
@@ -192,16 +187,10 @@ public class MainActivity extends AppCompatActivity  {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private class DrawerItemClickListener implements
-            ListView.OnItemClickListener {
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             SelectItem(position);
-
-
-
         }
     }
 }
-
