@@ -9,15 +9,15 @@ import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.List;
 
-public class SightManager implements SightProviderListener {
+public class SightManager {
+
+    SightProvider sightProvider;
 
     public SightManager(Context context) {
-        SightProvider sightProvider = new BlindWallsProvider(context);
-        sightProvider.getSights(this);
+        sightProvider = new BlindWallsProvider(context);
     }
 
-    @Override
-    public void onSightsAvailable(List<Sight> sights) {
-
+    public void getSights(SightProviderListener listener) {
+        sightProvider.getSights(listener);
     }
 }

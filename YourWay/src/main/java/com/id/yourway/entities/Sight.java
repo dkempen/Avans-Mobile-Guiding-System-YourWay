@@ -1,5 +1,7 @@
 package com.id.yourway.entities;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
@@ -105,6 +107,10 @@ public class Sight implements Comparable<Sight>, Serializable {
     public List<String> getImages() {
             return images;
         }
+
+    public LatLng getLatLng(){
+        return new LatLng(latitude, longitude);
+    }
 
     @Override
     public String toString() {
