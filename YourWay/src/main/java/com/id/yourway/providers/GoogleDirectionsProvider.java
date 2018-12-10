@@ -5,11 +5,6 @@ import android.content.Context;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
 import com.id.yourway.providers.listeners.DirectionsProviderListener;
 
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class GoogleDirectionsProvider implements DirectionsProvider {
 
     private static String BASE_URL  = "";

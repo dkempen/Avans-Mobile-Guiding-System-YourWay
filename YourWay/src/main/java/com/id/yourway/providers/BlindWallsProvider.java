@@ -55,16 +55,17 @@ public class BlindWallsProvider implements SightProvider {
                                 String catogoryEN = wall.getJSONObject("category").getString("en");
 
                                 JSONArray imagesArray = wall.getJSONArray("images");
-                                List<String> images = new ArrayList<>();
 
-                                for (int j = 0; j < imagesArray.length(); j++) {
-                                    JSONObject image = imagesArray.getJSONObject(j);
-                                    images.add("https://api.blindwalls.gallery/" + image.getString("url"));
+                                List imageUrls = new ArrayList<String>();
+                                for (int j = 0; j < imagesArray.length(); j++)
+                                {
+                                    imageUrls.add("https://api.blindwalls.gallery/" +
+                                            imagesArray.getJSONObject(j).getString("url"));
                                 }
 
                                 sights.add(new Sight(id, date, latitude, longitude, address, videoUrl,
                                         photographer, author, titleNL, titleEN, descriptionNL, descriptionEN,
-                                        materialNL, materialEN, catogoryNL, catogoryEN, images));
+                                        materialNL, materialEN, catogoryNL, catogoryEN, imageUrls));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
