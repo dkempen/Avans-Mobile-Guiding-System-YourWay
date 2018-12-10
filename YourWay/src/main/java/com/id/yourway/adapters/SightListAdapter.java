@@ -1,6 +1,7 @@
 package com.id.yourway.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.id.yourway.R;
+import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.entities.Sight;
 import com.squareup.picasso.Picasso;
 
@@ -62,11 +64,12 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
             imageView = itemView.findViewById(R.id.item_sight_imageView);
 
             //OnClick listener voor cardview item.
-//            itemView.setOnClickListener((View v) -> {
-//                Light light2 = lights.get(getAdapterPosition());
-//                Intent intent = new Intent(context, LightDetailedActivity.class);
-//                ctx.startActivity(intent);
-//            });
+            itemView.setOnClickListener((View v) -> {
+                Sight sight = sights.get(getAdapterPosition());
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("SIGHT_OBJECT", sight);
+                ctx.startActivity(intent);
+            });
         }
     }
 }
