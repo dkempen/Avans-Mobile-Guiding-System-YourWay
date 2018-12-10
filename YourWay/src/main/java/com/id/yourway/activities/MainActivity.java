@@ -14,9 +14,11 @@ import android.widget.ListView;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
+import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
 import com.id.yourway.fragments.FragmentLayoutItem;
+import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,11 +43,13 @@ public class MainActivity extends AppCompatActivity  {
     List<DrawerItem> dataList;
     private MapFragment mapFragment;
     private android.support.v4.app.FragmentManager fragmentManager;
+    private List<Sight> sights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        updateSights();
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();
@@ -86,6 +90,23 @@ public class MainActivity extends AppCompatActivity  {
             SelectItem(0);
         }
     }
+
+    public void updateSights(){
+        AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
+            @Override
+            public void onSightsAvailable(List<Sight> sights) {
+                setSights(sights);
+    }
+
+    public void setSights(List<Sight> sightslist) {
+                sights = sightslist;
+
+    }
+
+    public List<Sight> getSights() {
+        return sights;
+    }
+
 
     private void addItems() {
         dataList.add(new DrawerItem("Kaart", R.drawable.ic_launcher_foreground));
