@@ -1,5 +1,6 @@
 package com.id.yourway.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -34,16 +35,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        muralAuthorName = findViewById(R.id.detailedActivity_muralName);
         muralDescription = findViewById(R.id.detailedActivity_muralDescription);
         muralYear = findViewById(R.id.detailedActivity_muralYear);
 
         Intent intent = getIntent();
         sight = (Sight) intent.getSerializableExtra("SIGHT_OBJECT");
-
+        getSupportActionBar().setTitle(sight.getAuthor());
         muralDescription.setMovementMethod(new ScrollingMovementMethod());
         muralDescription.setText(sight.getDescription());
-        muralAuthorName.setText(sight.getAuthor());
 
         Date date = new Date(1485263473L * 1000);
         SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");

@@ -7,19 +7,6 @@
     tools:context=".activities.DetailActivity">
 
     <TextView
-        android:id="@+id/detailedActivity_muralName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="MuralName"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/detailedActivity_muralYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,13 +34,10 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/detailledviewPagerID"
-        android:layout_width="378dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="3dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailedActivity_muralName" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
