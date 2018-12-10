@@ -3,11 +3,17 @@ package com.id.yourway.providers;
 import android.content.Context;
 
 import com.android.volley.VolleyError;
+import com.id.yourway.entities.Sight;
 import com.id.yourway.providers.interfaces.SightProvider;
 import com.id.yourway.providers.listeners.RestProviderListener;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlindWallsProvider implements SightProvider {
 
@@ -23,13 +29,14 @@ public class BlindWallsProvider implements SightProvider {
                 new RestProviderListener() {
                     @Override
                     public void onRequestObjectAvailible(JSONObject response) {
-
+                        List<Sight> sights = new ArrayList<>();
+                        listener.onSightsAvailable(sights);
                     }
 
                     @Override
                     public void onRequestError(VolleyError error) {
 
                     }
-                });
+                }, false);
     }
 }
