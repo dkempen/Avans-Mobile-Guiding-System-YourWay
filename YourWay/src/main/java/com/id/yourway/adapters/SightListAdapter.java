@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
     public void onBindViewHolder(@NonNull final SightViewHolder viewHolder, int position) {
         Sight sight = sights.get(position);
         viewHolder.nameTextView.setText(sight.getAuthor());
+        String imageUrl = sight.getImages().get(0);
+        Picasso.get().load(imageUrl).into(viewHolder.imageView);
     }
 
     @NonNull
