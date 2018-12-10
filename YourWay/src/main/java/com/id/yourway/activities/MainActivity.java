@@ -58,6 +58,18 @@ public class MainActivity extends AppCompatActivity  {
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
         addItems();
 
+        if (savedInstanceState == null) {
+
+            if (dataList.get(0).isSpinner()
+                    & dataList.get(1).getTitle() != null) {
+                SelectItem(2);
+            } else if (dataList.get(0).getTitle() != null) {
+                SelectItem(1);
+            } else {
+                SelectItem(0);
+            }
+        }
+
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                 dataList);
 
@@ -88,6 +100,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void addItems() {
+        dataList.add(new DrawerItem("My Favorites")); // adding a header to the list
         dataList.add(new DrawerItem("Kaart", R.drawable.ic_launcher_foreground));
         dataList.add(new DrawerItem("Routes", R.drawable.ic_launcher_foreground));
         dataList.add(new DrawerItem("Bezienswaardigheden", R.drawable.ic_launcher_foreground));
@@ -176,10 +189,9 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-            SelectItem(position);
-
-
-
+            if (dataList.get(position).getTitle() == null) {
+                SelectItem(position);
+            }
         }
     }
 }
