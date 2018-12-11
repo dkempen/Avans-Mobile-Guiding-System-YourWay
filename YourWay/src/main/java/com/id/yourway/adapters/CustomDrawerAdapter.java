@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
-import com.id.yourway.SpinnerItem;
 
 import java.util.ArrayList;
 import java.util.List;

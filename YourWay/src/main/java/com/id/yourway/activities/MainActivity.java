@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toolbar;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
-        mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         instance = this;
@@ -76,23 +76,27 @@ public class MainActivity extends AppCompatActivity  {
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+        mDrawerTitle = getTitle();
+        mTitle = mDrawerTitle;
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 null, R.string.drawer_open,
                 R.string.drawer_close) {
             public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
+                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
             SelectItem(0);
