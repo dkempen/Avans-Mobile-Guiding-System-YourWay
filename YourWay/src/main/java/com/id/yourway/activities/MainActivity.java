@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
+import com.id.yourway.business.DatabaseManager;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
@@ -48,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DatabaseManager manager = new DatabaseManager(this);
+        int rp = manager.getRouteProgression("ello");
+        Log.e("RP", ""+rp);
         updateSights();
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
