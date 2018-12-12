@@ -105,11 +105,15 @@ public class MainActivity extends AppCompatActivity  {
 
     private void addItems() {
         dataList.add(new DrawerItem("My Favorites")); // adding a header to the list
-        dataList.add(new DrawerItem("Kaart", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Routes", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Bezienswaardigheden", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Ïnstellingen", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Help", R.drawable.ic_launcher_foreground));
+        addDrawer("Kaart", R.drawable.maps);
+        addDrawer("Routes", R.drawable.routes);
+        addDrawer("Bezienswaardigheden", R.drawable.eye);
+        addDrawer("Instellingen", R.drawable.settings);
+        addDrawer("Help", R.drawable.help);
+    }
+
+    private void addDrawer(String title, int ImgID){
+        dataList.add(new DrawerItem(title, ImgID));
     }
 
 
