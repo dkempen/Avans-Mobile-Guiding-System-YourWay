@@ -29,19 +29,15 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoContents(Marker marker) {
         View view = ((Activity)context).getLayoutInflater()
                 .inflate(R.layout.popup_maps, null);
-
-        TextView title = view.findViewById(R.id.title);
-        TextView author = view.findViewById(R.id.author);
-        ImageView img = view.findViewById(R.id.pic);
-
-        title.setText(marker.getTitle());
-
         Sight sight = (Sight) marker.getTag();
-        String imageurl = sight.getImages().get(0);
+        String authorString = sight.getAuthor();
+        String addressString = sight.getAddress();
 
-        Picasso.get().load(imageurl).into(img);
+        TextView author = view.findViewById(R.id.author);
+        TextView address = view.findViewById(R.id.address);
 
-        author.setText(sight.getAuthor());
+        author.setText(authorString);
+        address.setText(addressString);
 
         return view;
     }
