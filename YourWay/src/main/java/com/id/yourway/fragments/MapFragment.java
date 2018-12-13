@@ -194,7 +194,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void drawPolyLineOnMap(List<LatLng> list) {
         PolylineOptions polyOptions = new PolylineOptions();
-        polyOptions.color(Color.RED);
+        polyOptions.color(Color.BLUE);
         polyOptions.width(5);
         polyOptions.addAll(list);
 
@@ -205,12 +205,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         for (LatLng latLng : list) {
             builder.include(latLng);
         }
-
-        final LatLngBounds bounds = builder.build();
-
-        //BOUND_PADDING is an int to specify padding of bound.. try 100.
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, BOUND_PADDING);
-        mMap.animateCamera(cu);
     }
 
 
