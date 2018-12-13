@@ -2,7 +2,7 @@ package com.id.yourway.activities;
 
 import android.content.Context;
 
-import com.id.yourway.business.FeedbackManager;
+import com.id.yourway.business.feedback.FeedbackManager;
 import com.id.yourway.business.RouteManager;
 import com.id.yourway.business.SightManager;
 
