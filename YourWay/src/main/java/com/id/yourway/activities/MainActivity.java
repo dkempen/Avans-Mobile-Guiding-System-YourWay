@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupToolbar();
@@ -131,9 +132,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupToolbar() {
         Toolbar mToolbar = findViewById(R.id.tool_bar);
         mToolbar.bringToFront();
+        ImageButton searchButton = findViewById(R.id.toolBarSearchButton);
+        searchButton.setVisibility(View.INVISIBLE);
+
         setSupportActionBar(mToolbar);
         // Hide the title
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setTitle("Map");
 
         ImageButton settingsButton = findViewById(R.id.toolBarSettingsButton);
         settingsButton.setOnClickListener(v ->
