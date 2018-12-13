@@ -201,10 +201,12 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Zucht");
                 break;
             case 2:
+                System.out.println("Zucht");
+                break;
+            case 3:
                 //SightDetailFragment sightFragment = new SightDetailFragment();            case 3:
                 Intent intent = new Intent(getApplicationContext(), ListActivity.class);
                 startActivity(intent);
-                System.out.println("Zucht");
                 break;
             case 4:
                 Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
