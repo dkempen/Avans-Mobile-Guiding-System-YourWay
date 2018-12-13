@@ -12,6 +12,12 @@
         android:orientation="vertical">
 
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@android:color/holo_blue_bright" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
