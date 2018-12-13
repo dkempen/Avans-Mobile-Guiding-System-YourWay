@@ -1,6 +1,7 @@
 package com.id.yourway.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -9,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,7 +24,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
+import com.id.yourway.adapters.CustomInfoWindowAdapter;
 import com.id.yourway.entities.Sight;
 
 import java.util.ArrayList;
@@ -36,7 +40,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static android.content.Context.LOCATION_SERVICE;
 
 
-public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener {
+public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener, GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
     private static final int BOUND_PADDING = 100;
@@ -64,6 +68,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnInfoWindowClickListener(this);
 
         if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION))
             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSIONS_ID);
@@ -81,7 +86,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 .include(new LatLng(51.56619630165785, 4.864953377246138))
                 .include(new LatLng(51.53379788028693, 4.771831899595782))
                 .build();
-        
+
         mMap.setLatLngBoundsForCameraTarget(bounds);
         mMap.setBuildingsEnabled(false);
         mMap.setIndoorEnabled(false);
@@ -130,8 +135,17 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     private void addSightInternal(Sight sight) {
-        Marker marker = mMap.addMarker(new MarkerOptions().position(sight.getLatLng())
-                .anchor(0.5f, 0.5f));
+        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(getContext());
+        mMap.setInfoWindowAdapter(customInfoWindow);
+
+        MarkerOptions options = new MarkerOptions()
+                .position(sight.getLatLng())
+                .anchor(0.5f, 0.5f);
+
+        Marker marker = mMap.addMarker(options);
+        marker.setTag(sight);
+        marker.showInfoWindow();
+
         markerSightMap.put(marker, sight);
     }
 
@@ -227,6 +241,15 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Sight sight = (Sight) marker.getTag();
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra("SIGHT_OBJECT", sight);
+        startActivity(intent);
     }
 }
