@@ -47,11 +47,11 @@ public class BlindWallsProvider implements SightProvider {
                                 String author = wall.getString("author");
                                 String titleNL = wall.getJSONObject("title").getString("nl");
                                 String titleEN = wall.getJSONObject("title").getString("en");
-                                String descriptionNL = wall.getJSONObject("description").getString("en");
+                                String descriptionNL = wall.getJSONObject("description").getString("nl");
                                 String descriptionEN = wall.getJSONObject("description").getString("en");
-                                String materialNL = wall.getJSONObject("material").getString("en");
+                                String materialNL = wall.getJSONObject("material").getString("nl");
                                 String materialEN = wall.getJSONObject("material").getString("en");
-                                String catogoryNL = wall.getJSONObject("category").getString("en");
+                                String catogoryNL = wall.getJSONObject("category").getString("nl");
                                 String catogoryEN = wall.getJSONObject("category").getString("en");
 
                                 JSONArray imagesArray = wall.getJSONArray("images");
