@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toolbar;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         updateSights();
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
-        mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         instance = this;
@@ -61,29 +61,45 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
         addItems();
 
+        if (savedInstanceState == null) {
+
+            if (dataList.get(0).isSpinner()
+                    & dataList.get(1).getTitle() != null) {
+                SelectItem(2);
+            } else if (dataList.get(0).getTitle() != null) {
+                SelectItem(1);
+            } else {
+                SelectItem(0);
+            }
+        }
+
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                 dataList);
 
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+        mDrawerTitle = getTitle();
+        mTitle = mDrawerTitle;
+
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 null, R.string.drawer_open,
                 R.string.drawer_close) {
             public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
+                getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to
                 // onPrepareOptionsMenu()
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
             SelectItem(0);
@@ -109,12 +125,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItems() {
-        dataList.add(new DrawerItem("Kaart", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Routes", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Bezienswaardigheden", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Ïnstellingen", R.drawable.ic_launcher_foreground));
-        dataList.add(new DrawerItem("Help", R.drawable.ic_launcher_foreground));
+        dataList.add(new DrawerItem("My Favorites")); // adding a header to the list
+        addDrawer("Kaart", R.drawable.maps);
+        addDrawer("Routes", R.drawable.routes);
+        addDrawer("Bezienswaardigheden", R.drawable.eye);
+        addDrawer("Instellingen", R.drawable.settings);
+        addDrawer("Help", R.drawable.help);
     }
+
+    private void addDrawer(String title, int ImgID){
+        dataList.add(new DrawerItem(title, ImgID));
+    }
+
+
 
     public void SelectItem(int possition) {
 
@@ -189,8 +212,11 @@ public class MainActivity extends AppCompatActivity {
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            SelectItem(position);
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            if (dataList.get(position).getTitle() == null) {
+                SelectItem(position);
+            }
         }
     }
 }
