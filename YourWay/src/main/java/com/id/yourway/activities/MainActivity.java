@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -115,6 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerToggle.setDrawerIndicatorEnabled(false);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+        LayoutInflater inflater = getLayoutInflater();
+
+        View listHeaderView = inflater.inflate(R.layout.custom_header,null, false);
+
+        mDrawerList.addHeaderView(listHeaderView);
+
 
         if (savedInstanceState == null) {
             SelectItem(0);
@@ -170,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addItems() {
-        dataList.add(new DrawerItem("My Favorites")); // adding a header to the list
         addDrawer("Kaart", R.drawable.maps);
         addDrawer("Routes", R.drawable.routes);
         addDrawer("Bezienswaardigheden", R.drawable.eye);
