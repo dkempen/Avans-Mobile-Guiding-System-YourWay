@@ -18,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.adapters.CustomDrawerAdapter;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private MapFragment mapFragment;
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
+    private List<LatLng> latlng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupToolbar();
         updateSights();
+        long id =  Thread.currentThread().getId();
         //NavigationDrawer
         dataList = new ArrayList<>();
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
+
+
+
 
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
         addItems();
@@ -127,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             SelectItem(0);
         }
+
+
+
     }
 
     private void setupToolbar() {

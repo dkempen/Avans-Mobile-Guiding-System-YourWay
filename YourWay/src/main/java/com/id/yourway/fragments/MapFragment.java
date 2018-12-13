@@ -28,6 +28,8 @@ import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
 import com.id.yourway.entities.Sight;
+import com.id.yourway.providers.MovieCastDirectionsProvider;
+import com.id.yourway.providers.interfaces.DirectionsProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;

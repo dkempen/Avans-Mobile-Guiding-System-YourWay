@@ -28,6 +28,8 @@
         <item>-1</item>
     </string-array>
 
+    <string name="moviecast_directions_api_key">ee5dcca8-71c5-4679-b81a-5744b1e87a31</string>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 

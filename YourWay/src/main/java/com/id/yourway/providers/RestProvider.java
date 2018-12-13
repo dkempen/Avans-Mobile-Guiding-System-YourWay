@@ -44,6 +44,7 @@ class RestProvider {
                         try {
                             JSONObject object = new JSONObject();
                             object.put("response", response);
+                            long id = Thread.currentThread().getId();
                             listener.onRequestObjectAvailible(object);
                         } catch (JSONException e) {
                             e.printStackTrace();
