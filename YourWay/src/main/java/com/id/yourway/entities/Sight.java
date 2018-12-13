@@ -27,6 +27,15 @@ public class Sight implements Comparable<Sight>, Serializable {
     private String catogoryEN;
     private List<String> images;
 
+    public Sight(int id, double latitude, double longitude, String descriptionNL, String descriptionEN, List<String> images) {
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.descriptionNL = descriptionNL;
+        this.descriptionEN = descriptionEN;
+        this.images = images;
+    }
+
     public Sight(int id, long date, double latitude, double longitude, String address,
                  String videoUrl, String photographer, String author, String titleNL,
                  String titleEN, String descriptionNL, String descriptionEN, String materialNL,
