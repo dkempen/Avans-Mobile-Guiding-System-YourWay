@@ -2,6 +2,7 @@ package com.id.yourway.activities;
 
 import android.app.Fragment;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -159,46 +160,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void SelectItem(int possition) {
 
-        Fragment fragment = null;
         Bundle args = new Bundle();
+        System.out.println(possition);
         switch (possition) {
-            case 0:
-                fragment = new FragmentLayoutItem();
-                args.putString(FragmentLayoutItem.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentLayoutItem.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
             case 1:
-                fragment = new FragmentLayoutItem();
-                args.putString(FragmentLayoutItem.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentLayoutItem.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                System.out.println("Zucht");
                 break;
             case 2:
-                fragment = new FragmentLayoutItem();
-                args.putString(FragmentLayoutItem.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentLayoutItem.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
-                break;
+                //SightDetailFragment sightFragment = new SightDetailFragment();
             case 3:
-                fragment = new FragmentLayoutItem();
-                args.putString(FragmentLayoutItem.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentLayoutItem.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                startActivity(intent);
+                System.out.println("Zucht");
                 break;
             case 4:
-                fragment = new FragmentLayoutItem();
-                args.putString(FragmentLayoutItem.ITEM_NAME, dataList.get(possition)
-                        .getItemName());
-                args.putInt(FragmentLayoutItem.IMAGE_RESOURCE_ID, dataList.get(possition)
-                        .getImgResID());
+                Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
+                startActivity(intent2);
+                break;
+            case 5:
+                //HelpFragment fragment = new HelpFragment();
+                System.out.println("Zucht");
                 break;
         }
-        fragment.setArguments(args);
 
         mDrawerList.setItemChecked(possition, true);
         setTitle(dataList.get(possition).getItemName());
