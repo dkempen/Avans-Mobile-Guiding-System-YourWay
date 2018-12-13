@@ -32,6 +32,17 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         Sight sight = (Sight) marker.getTag();
         String authorString = sight.getAuthor();
         String addressString = sight.getAddress();
+        ImageView imageView = view.findViewById(R.id.imageView3);
+        if(sight.getType() == "Blindwall")
+        {
+            Picasso.get()
+                    .load(sight.getImages().get(0))
+                    .into(imageView);
+        } else if(sight.getType() == "vvv")
+        {
+            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p", sight.getImages().get(0), null);
+            imageView.setImageResource(resid);
+        }
 
         TextView author = view.findViewById(R.id.author);
         TextView address = view.findViewById(R.id.address);
