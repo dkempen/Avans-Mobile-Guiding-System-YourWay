@@ -76,7 +76,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             mMap.setMyLocationEnabled(true);
 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
-                .target(new LatLng(51.5719149, 4.768323000000009))
+                .target(new LatLng(51.59144918270287, 4.775340557098389))
                 .bearing(0)
                 .zoom(15)
                 .build()));
@@ -96,12 +96,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setOnCameraMoveListener(this);
         mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        UiSettings settings = googleMap.getUiSettings();
-        settings.setZoomControlsEnabled(true);
-        settings.setTiltGesturesEnabled(true);
-        settings.setCompassEnabled(true);
-        settings.setMapToolbarEnabled(false);
-        settings.setMyLocationButtonEnabled(true);
+//        UiSettings settings = googleMap.getUiSettings();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setTiltGesturesEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         Iterator<Runnable> iterator = runnables.iterator();
         while (iterator.hasNext()) {
@@ -194,7 +194,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void drawPolyLineOnMap(List<LatLng> list) {
         PolylineOptions polyOptions = new PolylineOptions();
-        polyOptions.color(Color.RED);
+        polyOptions.color(Color.BLUE);
         polyOptions.width(5);
         polyOptions.addAll(list);
 
@@ -205,12 +205,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         for (LatLng latLng : list) {
             builder.include(latLng);
         }
-
-        final LatLngBounds bounds = builder.build();
-
-        //BOUND_PADDING is an int to specify padding of bound.. try 100.
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, BOUND_PADDING);
-        mMap.animateCamera(cu);
     }
 
 
