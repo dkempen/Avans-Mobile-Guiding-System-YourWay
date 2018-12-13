@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.business.DatabaseManager;
+import com.id.yourway.business.listeners.DirectionsListener;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
@@ -51,23 +52,25 @@ public class MainActivity extends AppCompatActivity {
     private MapFragment mapFragment;
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
+    private List<LatLng> latlng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DatabaseManager manager = new DatabaseManager(this);
-        int rp = manager.getRouteProgression("ello");
-        Log.e("RP", ""+new LatLng(20.0, 20.0).toString());
         updateSights();
+        long id =  Thread.currentThread().getId();
         //NavigationDrawer
-        dataList = new ArrayList<DrawerItem>();
+        dataList = new ArrayList<>();
         mTitle = mDrawerTitle = getTitle();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerList = findViewById(R.id.left_drawer);
         instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
+
+
+
 
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
         addItems();
@@ -94,35 +97,33 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-//        DirectionsProvider dirProv = new MovieCastDirectionsProvider(this);
-//        List<LatLng> latlngs = new ArrayList<>();
-//        latlngs.add(new LatLng(51.5839, 4.77735));
-//        latlngs.add(new LatLng(51.58182, 4.77572));
-//        latlngs.add(new LatLng(51.59225, 4.75722));
-//        latlngs.add(new LatLng(51.58815, 4.77834));
-//        dirProv.queueDirectionsRequest(latlngs, directionList -> {
-//
-//
-//        });
-
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
             SelectItem(0);
         }
+
+
+
     }
 
     public void updateSights() {
-        AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
-            @Override
-            public void onSightsAvailable(List<Sight> sights) {
-                setSights(sights);
-            }
-        });
+        AppContext.getInstance(this).getSightManager().getSights(sights -> setSights(sights));
+
     }
 
     public void setSights(List<Sight> sightslist) {
         sights = sightslist;
+
+        List<LatLng> ll = new ArrayList<>();
+        for(Sight sight: sights){
+            ll.add(new LatLng(sight.getLatitude(), sight.getLongitude()));
+        }
+
+        AppContext ctx = AppContext.getInstance(this);
+        ctx.getRouteManager().getDirections(ll.subList(0,42), directionList -> {
+            Log.e("ello", "ll");
+        });
 
     }
 

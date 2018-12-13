@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.business.listeners.DirectionsListener;
 import com.id.yourway.providers.MovieCastDirectionsProvider;
+import com.id.yourway.providers.MovieCastDirectionsProviderV2;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
 import com.id.yourway.providers.listeners.DirectionsProviderListener;
 
@@ -19,7 +20,7 @@ public class RouteManager {
 
     public RouteManager(Context context){
         databaseManager = new DatabaseManager(context);
-        directionsProvider = new MovieCastDirectionsProvider(context);
+        directionsProvider = new MovieCastDirectionsProviderV2(context);
         routes = new ArrayList<>();
         routes.add("Blindwallroute 1");
         routes.add("Blindwallroute 2");

@@ -110,24 +110,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             Runnable runnable = iterator.next();
             runnable.run();
         }
-
-        DirectionsProvider dirProv = new MovieCastDirectionsProvider(this.getContext());
-        List<LatLng> latlngs = new ArrayList<>();
-        latlngs.add(new LatLng(51.5839, 4.77735));
-        latlngs.add(new LatLng(51.58182, 4.77572));
-        latlngs.add(new LatLng(51.59225, 4.75722));
-        latlngs.add(new LatLng(51.58815, 4.77834));
-        dirProv.queueDirectionsRequest(latlngs, directionList -> {
-            PolylineOptions options = new PolylineOptions();
-            for(LatLng p : directionList){
-                options.add(p);
-            }
-            options.color(Color.RED);
-            mMap.addPolyline(options);
-
-        });
-
-
     }
 
     public void removeMarkers() {
@@ -140,12 +122,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         if(!sights.contains(sight)) {
             sights.add(sight);
             if (mMap == null)
-                runnables.add(new Runnable() {
-                    @Override
-                    public void run() {
-                        addRideInternal(sight);
-                    }
-                });
+                runnables.add(() -> addRideInternal(sight));
             else {
                 addRideInternal(sight);
             }

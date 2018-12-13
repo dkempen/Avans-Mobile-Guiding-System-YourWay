@@ -66,7 +66,10 @@ public class MovieCastDirectionsProvider implements DirectionsProvider {
 
 
 class DirectionBuilderHelper{
-        private static String formatLatLng(LatLng latLng){
+
+    public static final int ALLOWEDREQUESTS = 25;
+
+    private static String formatLatLng(LatLng latLng){
             return latLng.latitude+","+latLng.longitude;
         }
         public static String buildStandardRequest(String key, List<LatLng> wayPoints){
@@ -89,5 +92,22 @@ class DirectionBuilderHelper{
             requestBuilder.append(formatLatLng(wayPoints.get(wayPoints.size()-1)));
             return requestBuilder.toString();
         }
+
+    public static List<String> buildDecoupledOptimizedRequest(String key, List<LatLng> wayPoints){
+        List<String> requestList = new ArrayList<>();
+        int remainderRequest = wayPoints.size() % ALLOWEDREQUESTS;
+        int numRequests =  wayPoints.size()-remainderRequest;
+        for(int i  = 0; i< numRequests; i+= ALLOWEDREQUESTS){
+           List<LatLng> decoupledWaypoints =  wayPoints.subList(i, i+ALLOWEDREQUESTS);
+           String requestString = buildStandardRequest(key, decoupledWaypoints);
+           requestList.add(requestString);
+        }
+        if(remainderRequest > 0){
+            List<LatLng> remainingWaypoints =  wayPoints.subList(numRequests, numRequests+remainderRequest);
+            String requestString = buildStandardRequest(key, remainingWaypoints);
+            requestList.add(requestString);
+        }
+        return requestList;
+    }
 
 }
