@@ -31,9 +31,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.id.yourway.R;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.entities.Sight;
+import com.id.yourway.providers.MovieCastDirectionsProvider;
+import com.id.yourway.providers.interfaces.DirectionsProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,6 +110,24 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             Runnable runnable = iterator.next();
             runnable.run();
         }
+
+        DirectionsProvider dirProv = new MovieCastDirectionsProvider(this.getContext());
+        List<LatLng> latlngs = new ArrayList<>();
+        latlngs.add(new LatLng(51.5839, 4.77735));
+        latlngs.add(new LatLng(51.58182, 4.77572));
+        latlngs.add(new LatLng(51.59225, 4.75722));
+        latlngs.add(new LatLng(51.58815, 4.77834));
+        dirProv.queueDirectionsRequest(latlngs, directionList -> {
+            PolylineOptions options = new PolylineOptions();
+            for(LatLng p : directionList){
+                options.add(p);
+            }
+            options.color(Color.RED);
+            mMap.addPolyline(options);
+
+        });
+
+
     }
 
     public void removeMarkers() {

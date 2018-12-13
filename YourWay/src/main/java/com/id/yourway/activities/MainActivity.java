@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.business.DatabaseManager;
@@ -20,6 +22,10 @@ import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
 import com.id.yourway.fragments.FragmentLayoutItem;
+import com.id.yourway.providers.GoogleDirectionsProvider;
+import com.id.yourway.providers.MovieCastDirectionsProvider;
+import com.id.yourway.providers.interfaces.DirectionsProvider;
+import com.id.yourway.providers.listeners.DirectionsProviderListener;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
@@ -52,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         DatabaseManager manager = new DatabaseManager(this);
         int rp = manager.getRouteProgression("ello");
-        Log.e("RP", ""+rp);
+        Log.e("RP", ""+new LatLng(20.0, 20.0).toString());
         updateSights();
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
@@ -87,6 +93,17 @@ public class MainActivity extends AppCompatActivity {
                 // onPrepareOptionsMenu()
             }
         };
+
+//        DirectionsProvider dirProv = new MovieCastDirectionsProvider(this);
+//        List<LatLng> latlngs = new ArrayList<>();
+//        latlngs.add(new LatLng(51.5839, 4.77735));
+//        latlngs.add(new LatLng(51.58182, 4.77572));
+//        latlngs.add(new LatLng(51.59225, 4.75722));
+//        latlngs.add(new LatLng(51.58815, 4.77834));
+//        dirProv.queueDirectionsRequest(latlngs, directionList -> {
+//
+//
+//        });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 

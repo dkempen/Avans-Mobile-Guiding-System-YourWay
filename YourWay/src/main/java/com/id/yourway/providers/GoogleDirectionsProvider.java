@@ -31,7 +31,7 @@ public class GoogleDirectionsProvider implements DirectionsProvider {
     }
 
     @Override
-    public void queueDirectionsRequest(DirectionsProviderListener listener) {
+    public void queueDirectionsRequest(List<LatLng> boi,  DirectionsProviderListener listener) {
 //            restProvider.getRequest(BASE_URL + "?key="+apikey+"&origin=Toronto&destination=Montreal", new RestProviderListener() {
 //                @Override
 //                public void onRequestObjectAvailible(JSONObject response, RestResponseType restResponseType) {
@@ -47,9 +47,3 @@ public class GoogleDirectionsProvider implements DirectionsProvider {
 }
 
 
-class DecoderHelper{
-
-     static List<LatLng> decodePoints(String encodedPoints){
-        return null;
-     }
-}
