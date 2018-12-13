@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,15 +23,19 @@ import com.id.yourway.fragments.FragmentLayoutItem;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MapFragment.class.getSimpleName();
 
     private static MainActivity instance;
 
     public static MainActivity getInstance() {
         return instance;
     }
+    private Map<String, Sight> sightMap = new HashMap<>();
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -76,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
                 dataList);
 
+        try {
+            mapFragment.getGps();
+            Log.i(TAG, "onCreate: getGps successful");
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: ", e);
+        }
+
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -110,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
         AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
             @Override
             public void onSightsAvailable(List<Sight> sights) {
+                mapFragment.removeMarkers();
+                sightMap = new HashMap<>();
+                for (Sight sight : sights) {
+                    sightMap.put("" + sight.getId(), sight);
+                    mapFragment.addSight(sight);
+                }
                 setSights(sights);
             }
         });
