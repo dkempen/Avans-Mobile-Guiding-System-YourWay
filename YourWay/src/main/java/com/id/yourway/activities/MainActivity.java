@@ -15,21 +15,22 @@ import android.widget.Toolbar;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
+import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
 import com.id.yourway.fragments.FragmentLayoutItem;
+import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static MainActivity instance;
 
     public static MainActivity getInstance() {
         return instance;
     }
-
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -42,11 +43,13 @@ public class MainActivity extends AppCompatActivity  {
     List<DrawerItem> dataList;
     private MapFragment mapFragment;
     private android.support.v4.app.FragmentManager fragmentManager;
+    private List<Sight> sights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        updateSights();
         //NavigationDrawer
         dataList = new ArrayList<DrawerItem>();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -101,6 +104,24 @@ public class MainActivity extends AppCompatActivity  {
         if (savedInstanceState == null) {
             SelectItem(0);
         }
+    }
+
+    public void updateSights() {
+        AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
+            @Override
+            public void onSightsAvailable(List<Sight> sights) {
+                setSights(sights);
+            }
+        });
+    }
+
+    public void setSights(List<Sight> sightslist) {
+        sights = sightslist;
+
+    }
+
+    public List<Sight> getSights() {
+        return sights;
     }
 
     private void addItems() {
@@ -166,7 +187,6 @@ public class MainActivity extends AppCompatActivity  {
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -178,10 +198,8 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
-        }
-
         return false;
     }
 
@@ -192,8 +210,7 @@ public class MainActivity extends AppCompatActivity  {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private class DrawerItemClickListener implements
-            ListView.OnItemClickListener {
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
@@ -203,4 +220,3 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 }
-
