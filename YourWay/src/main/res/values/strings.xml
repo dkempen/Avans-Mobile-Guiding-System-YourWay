@@ -81,4 +81,6 @@
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="HeaderName">Henk</string>
+    <string name="Kleurenblind">Kleurenblind</string>
+    <string name="Vibrate">Vibrate</string>
 </resources>
