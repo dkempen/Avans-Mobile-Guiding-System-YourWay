@@ -140,13 +140,13 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setInfoWindowAdapter(customInfoWindow);
         MarkerOptions options = null;
 
-        if(sight.getType() == "VVV")
+        if(sight.getType().equals("VVV"))
         {
             options = new MarkerOptions()
                     .position(sight.getLatLng())
                     .anchor(0.5f, 0.5f)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-        }else if(sight.getType() == "Blindwall")
+        }else if(sight.getType().equals("Blindwall"))
         {
             options = new MarkerOptions()
                     .position(sight.getLatLng())
