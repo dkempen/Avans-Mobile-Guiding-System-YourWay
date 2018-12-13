@@ -95,8 +95,8 @@ public class BlindWallsProvider implements SightProvider {
                                 String descriptionNL = vvv.getString("description-nl");
                                 String descriptionEN = vvv.getString("description-en");
 
-                                List imageUrls2 = new ArrayList<String>();
-                                imageUrls2.add(photoid);
+                                List<String> imageUrls2 = new ArrayList<String>();
+                                imageUrls2.add(String.valueOf(photoid));
 
                                 if(!name.equals(""))
                                 {

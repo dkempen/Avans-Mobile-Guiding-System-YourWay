@@ -1,6 +1,7 @@
 package com.id.yourway.adapters;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -38,9 +42,11 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             Picasso.get()
                     .load(sight.getImages().get(0))
                     .into(imageView);
-        } else if(sight.getType() == "vvv")
+        }
+        else if(sight.getType() == "VVV")
         {
-            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p", sight.getImages().get(0), null);
+            String imageUrl = "" + sight.getImages().get(0);
+            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
             imageView.setImageResource(resid);
         }
 
