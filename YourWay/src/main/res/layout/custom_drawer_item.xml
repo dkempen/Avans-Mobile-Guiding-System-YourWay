@@ -7,21 +7,16 @@
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:srcCompat="@android:color/holo_blue_bright" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="36sp"
             android:text="@string/app_name"
             android:textSize="30sp"
             tools:layout_editor_absoluteY="20dp" />
@@ -40,18 +35,18 @@
         <LinearLayout
 
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:minHeight="50dp">
 
             <ImageView
                 android:id="@+id/drawer_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
             <TextView
                 android:id="@+id/drawer_itemName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
 
                 android:textSize="18sp" />
