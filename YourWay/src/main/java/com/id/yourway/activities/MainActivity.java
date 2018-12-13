@@ -1,27 +1,28 @@
 package com.id.yourway.activities;
 
-import android.app.Fragment;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
-import com.id.yourway.entities.Sight;
-import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.adapters.CustomDrawerAdapter;
-import com.id.yourway.fragments.FragmentLayoutItem;
-import com.id.yourway.providers.listeners.SightProviderListener;
+import com.id.yourway.entities.Sight;
+import com.id.yourway.fragments.HelpFragment;
+import com.id.yourway.fragments.MapFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupToolbar();
         updateSights();
         //NavigationDrawer
-        dataList = new ArrayList<DrawerItem>();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        dataList = new ArrayList<>();
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerList = findViewById(R.id.left_drawer);
         instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
@@ -119,24 +121,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setupToolbar() {
+        Toolbar mToolbar = findViewById(R.id.tool_bar);
+        mToolbar.bringToFront();
+        setSupportActionBar(mToolbar);
+        // Hide the title
+        getSupportActionBar().setTitle(null);
+
+        ImageButton settingsButton = findViewById(R.id.toolBarSettingsButton);
+        settingsButton.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, PreferencesActivity.class)));
+
+        ImageButton hamburgerButton = findViewById(R.id.toolBarHamburgerButton);
+        hamburgerButton.setOnClickListener(v -> {
+            if (mDrawerLayout.isDrawerOpen(Gravity.START))
+                mDrawerLayout.closeDrawer(Gravity.START);
+            else
+                mDrawerLayout.openDrawer(Gravity.START);
+        });
+
+        ImageButton helpButton = findViewById(R.id.toolBarHelpButton);
+        helpButton.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            HelpFragment helpFragment = new HelpFragment();
+            helpFragment.show(ft, "HELP");
+        });
+    }
+
     public void updateSights() {
-        AppContext.getInstance(this).getSightManager().getSights(new SightProviderListener() {
-            @Override
-            public void onSightsAvailable(List<Sight> sights) {
-                mapFragment.removeMarkers();
-                sightMap = new HashMap<>();
-                for (Sight sight : sights) {
-                    sightMap.put("" + sight.getId(), sight);
-                    mapFragment.addSight(sight);
-                }
-                setSights(sights);
+        AppContext.getInstance(this).getSightManager().getSights(sights -> {
+            mapFragment.removeMarkers();
+            sightMap = new HashMap<>();
+            for (Sight sight : sights) {
+                sightMap.put("" + sight.getId(), sight);
+                mapFragment.addSight(sight);
             }
+            setSights(sights);
         });
     }
 
     public void setSights(List<Sight> sightslist) {
         sights = sightslist;
-
     }
 
     public List<Sight> getSights() {
@@ -155,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
     private void addDrawer(String title, int ImgID){
         dataList.add(new DrawerItem(title, ImgID));
     }
-
-
 
     public void SelectItem(int possition) {
 

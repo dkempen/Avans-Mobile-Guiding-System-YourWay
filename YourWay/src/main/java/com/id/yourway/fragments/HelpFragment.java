@@ -3,6 +3,7 @@ package com.id.yourway.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,7 @@ import android.view.ViewGroup;
 import com.id.yourway.R;
 
 
-public class HelpFragment extends Fragment {
-
+public class HelpFragment extends DialogFragment {
 
     public HelpFragment() {
     }
