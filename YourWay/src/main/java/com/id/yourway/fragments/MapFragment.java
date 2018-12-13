@@ -2,6 +2,7 @@ package com.id.yourway.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.entities.Sight;
 
@@ -36,6 +39,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener {
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
+    private static final int BOUND_PADDING = 100;
     private GoogleMap mMap;
     private List<Sight> sights;
     private Map<Marker, Sight> markerSightMap;
@@ -172,6 +176,27 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
     private void requestPermission(String permission, int code) {
         requestPermissions(new String[]{permission}, code);
+    }
+
+    public void drawPolyLineOnMap(List<LatLng> list) {
+        PolylineOptions polyOptions = new PolylineOptions();
+        polyOptions.color(Color.RED);
+        polyOptions.width(5);
+        polyOptions.addAll(list);
+
+        mMap.clear();
+        mMap.addPolyline(polyOptions);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng latLng : list) {
+            builder.include(latLng);
+        }
+
+        final LatLngBounds bounds = builder.build();
+
+        //BOUND_PADDING is an int to specify padding of bound.. try 100.
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, BOUND_PADDING);
+        mMap.animateCamera(cu);
     }
 
 
