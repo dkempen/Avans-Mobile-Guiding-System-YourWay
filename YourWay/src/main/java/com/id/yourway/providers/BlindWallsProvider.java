@@ -1,6 +1,7 @@
 package com.id.yourway.providers;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.entities.Sight;
@@ -12,15 +13,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlindWallsProvider implements SightProvider {
 
     private final RestProvider restProvider;
+    List<Sight> sights = new ArrayList<>();
+    InputStream is;
+
 
     public BlindWallsProvider(Context context) {
         restProvider = RestProvider.getInstance(context);
+        try {
+            is = context.getAssets().open("json/vvv.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -29,7 +41,6 @@ public class BlindWallsProvider implements SightProvider {
                 new RestProviderListener() {
                     @Override
                     public void onRequestObjectAvailible(JSONObject response) {
-                        List<Sight> sights = new ArrayList<>();
 
                         try {
                             JSONArray array = response.getJSONArray("response");
@@ -65,8 +76,34 @@ public class BlindWallsProvider implements SightProvider {
 
                                 sights.add(new Sight(id, date, latitude, longitude, address, videoUrl,
                                         photographer, author, titleNL, titleEN, descriptionNL, descriptionEN,
-                                        materialNL, materialEN, catogoryNL, catogoryEN, imageUrls));
+                                        materialNL, materialEN, catogoryNL, catogoryEN, imageUrls, "Blindwall"));
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        String json = loadJSONFromAsset();
+                        try {
+                            JSONArray jsonObj = new JSONArray(json);
+                            for (int i = 0; i < jsonObj.length(); i++) {
+                                JSONObject vvv = jsonObj.getJSONObject(i);
+                                int id = vvv.getInt("id");
+                                double lat = vvv.getDouble("lat");
+                                double lon = vvv.getDouble("long");
+                                String name = vvv.getString("name");
+                                String note = vvv.getString("note");
+                                int photoid = vvv.getInt("photoid");
+                                String descriptionNL = vvv.getString("description-nl");
+                                String descriptionEN = vvv.getString("description-en");
+
+                                List imageUrls2 = new ArrayList<String>();
+                                imageUrls2.add(photoid);
+
+                                if(!name.equals(""))
+                                {
+                                    sights.add(new Sight(id, lat, lon, descriptionNL, descriptionEN, imageUrls2, name, "VVV"));
+                                }
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -79,5 +116,20 @@ public class BlindWallsProvider implements SightProvider {
                         // TODO: Error handling of BlindWallsAPI
                     }
                 }, false);
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
