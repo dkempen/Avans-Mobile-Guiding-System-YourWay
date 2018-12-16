@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.ImageView;
@@ -25,7 +26,9 @@ import java.util.TimeZone;
 
 public class DetailActivity extends AppCompatActivity {
 
+    Toolbar muralTitle;
     TextView muralAuthorName;
+    TextView muralPhotographer;
     TextView muralDescription;
     TextView muralYear;
     Sight sight;
@@ -35,14 +38,30 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+
+        muralTitle = findViewById(R.id.toolbar_detail);
+        muralAuthorName = findViewById(R.id.detailedActivity_author);
+        muralPhotographer = findViewById(R.id.detailedActivity_photographer);
         muralDescription = findViewById(R.id.detailedActivity_muralDescription);
-        muralYear = findViewById(R.id.detailedActivity_muralYear);
+        muralYear = findViewById(R.id.detailedActivity_year);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         Intent intent = getIntent();
         sight = (Sight) intent.getSerializableExtra("SIGHT_OBJECT");
-        getSupportActionBar().setTitle(sight.getAuthor());
-        muralDescription.setMovementMethod(new ScrollingMovementMethod());
+        //setTitle(sight.getAuthor());
+        //muralDescription.setMovementMethod(new ScrollingMovementMethod());
         muralDescription.setText(sight.getDescription());
+        muralAuthorName.setText(sight.getAuthor());
+        muralPhotographer.setText(sight.getPhotographer());
+
+        setSupportActionBar(toolbar);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(sight.getTitle());
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
 
         Date date = new Date(1485263473L * 1000);
         SimpleDateFormat jdf = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");

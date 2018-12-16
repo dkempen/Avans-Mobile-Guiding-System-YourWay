@@ -85,4 +85,15 @@
     <string name="HeaderName">Henk</string>
     <string name="Kleurenblind">Kleurenblind</string>
     <string name="Vibrate">Vibrate</string>
+
+    <string name="map">Map</string>
+    <string name="route">Route</string>
+    <string name="Sight">Sight</string>
+    <string name="Settings">Settings</string>
+    <string name="Help">Help</string>
+
+
+    <string name="year">Year: </string>
+    <string name="author">Author: </string>
+    <string name="photographer">Photographer: </string>
 </resources>

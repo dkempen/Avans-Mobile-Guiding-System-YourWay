@@ -2,6 +2,7 @@ package com.id.yourway.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
             view = inflater.inflate(layoutResID, parent, false);
 
-            drawerHolder.itemLayout = (LinearLayout) view.findViewById(R.id.itemLayout);
+            drawerHolder.itemLayout = view.findViewById(R.id.itemLayout);
             drawerHolder.ItemName = (TextView) view.findViewById(R.id.drawer_itemName);
             drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
 
@@ -78,7 +79,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
     private static class DrawerItemHolder {
         TextView ItemName;
         ImageView icon;
-        LinearLayout headerLayout, itemLayout;
+        ConstraintLayout headerLayout, itemLayout;
     }
 
 

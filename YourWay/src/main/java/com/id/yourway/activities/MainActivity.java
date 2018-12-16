@@ -3,9 +3,14 @@ package com.id.yourway.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,7 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.adapters.CustomDrawerAdapter;
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private Map<String, Sight> sightMap = new HashMap<>();
 
+    private DrawerLayout drawerLayout;
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -50,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     CustomDrawerAdapter adapter;
 
-    List<DrawerItem> dataList;
     private MapFragment mapFragment;
+    private HelpFragment helpFragment;
+
+    List<DrawerItem> dataList;
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
     private List<LatLng> latlng;
@@ -66,32 +74,48 @@ public class MainActivity extends AppCompatActivity {
         long id =  Thread.currentThread().getId();
         //NavigationDrawer
         dataList = new ArrayList<>();
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerList = findViewById(R.id.left_drawer);
         instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
 
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
 
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.maps_item:
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                mapFragment).addToBackStack(null).commitAllowingStateLoss();
+                        break;
+
+                    case  R.id.routes_item:
+                        break;
+
+                    case  R.id.sight_item :
+                        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+                        startActivity(intent);
+                        break;
+                    case  R.id.settings_item :
+                        Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case  R.id.help_item :
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                helpFragment).addToBackStack(null).commitAllowingStateLoss();
+                        break;
+                }
+                if (item.getGroupId() == R.id.top_group_drawer)
+                    drawerLayout.closeDrawers();
+
+                return true;
+            }
+        });
 
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
-        addItems();
-
-        if (savedInstanceState == null) {
-
-            if (dataList.get(0).isSpinner()
-                    & dataList.get(1).getTitle() != null) {
-                SelectItem(2);
-            } else if (dataList.get(0).getTitle() != null) {
-                SelectItem(1);
-            } else {
-                SelectItem(0);
-            }
-        }
-
-        adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
-                dataList);
 
         try {
             mapFragment.getGps();
@@ -99,44 +123,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e);
         }
-
-        mDrawerList.setAdapter(adapter);
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        mDrawerTitle = getTitle();
-        mTitle = mDrawerTitle;
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                null, R.string.drawer_open,
-                R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
-            }
-        };
-
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-        LayoutInflater inflater = getLayoutInflater();
-
-        View listHeaderView = inflater.inflate(R.layout.custom_header,null, false);
-
-        mDrawerList.addHeaderView(listHeaderView);
-
-
-        if (savedInstanceState == null) {
-            SelectItem(0);
-        }
-
-
-
     }
 
     private void setupToolbar() {
@@ -155,10 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton hamburgerButton = findViewById(R.id.toolBarHamburgerButton);
         hamburgerButton.setOnClickListener(v -> {
-            if (mDrawerLayout.isDrawerOpen(Gravity.START))
-                mDrawerLayout.closeDrawer(Gravity.START);
-            else
-                mDrawerLayout.openDrawer(Gravity.START);
+                    drawerLayout.openDrawer(GravityCompat.START);
         });
 
         ImageButton helpButton = findViewById(R.id.toolBarHelpButton);
@@ -190,79 +173,9 @@ public class MainActivity extends AppCompatActivity {
         return sights;
     }
 
-    private void addItems() {
-        addDrawer("Kaart", R.drawable.maps);
-        addDrawer("Routes", R.drawable.routes);
-        addDrawer("Bezienswaardigheden", R.drawable.eye);
-        addDrawer("Instellingen", R.drawable.settings);
-        addDrawer("Help", R.drawable.help);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//    }
 
-    private void addDrawer(String title, int ImgID){
-        dataList.add(new DrawerItem(title, ImgID));
-    }
-
-    public void SelectItem(int possition) {
-
-        Bundle args = new Bundle();
-        System.out.println(possition);
-        switch (possition) {
-            case 1:
-                System.out.println("Zucht");
-                break;
-            case 2:
-                System.out.println("Zucht");
-                break;
-            case 3:
-                //SightDetailFragment sightFragment = new SightDetailFragment();            case 3:
-                Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-                startActivity(intent);
-                break;
-            case 4:
-                Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
-                startActivity(intent2);
-                break;
-            case 5:
-                //HelpFragment fragment = new HelpFragment();
-                System.out.println("Zucht");
-                break;
-        }
-
-        mDrawerList.setItemChecked(possition, true);
-        setTitle(dataList.get(possition).getItemName());
-        mDrawerLayout.closeDrawer(mDrawerList);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item))
-            return true;
-        return false;
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            if (dataList.get(position).getTitle() == null) {
-                SelectItem(position);
-            }
-        }
-    }
 }
