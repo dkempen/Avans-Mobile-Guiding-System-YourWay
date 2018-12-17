@@ -36,12 +36,7 @@ public class HelpFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_help, container, false);
         Button button = view.findViewById(R.id.okButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        button.setOnClickListener(v -> dismiss());
         return view;
     }
 
