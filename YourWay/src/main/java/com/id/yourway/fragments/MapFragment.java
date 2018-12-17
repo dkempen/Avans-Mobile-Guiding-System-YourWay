@@ -20,10 +20,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
@@ -33,6 +37,7 @@ import com.id.yourway.providers.MovieCastDirectionsProvider;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -46,12 +51,16 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener, GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
+    public static final List<PatternItem> PATTERN_POLYGON_ALPHA =
+            Arrays.asList(new Gap(20), new Dash(20));
     private static final int BOUND_PADDING = 100;
     private GoogleMap mMap;
     private List<Sight> sights;
     private Map<Marker, Sight> markerSightMap;
     private Queue<Runnable> runnables;
     private android.location.Location location;
+
+    private Polyline track;
 
     public MapFragment() {
         // Required empty public constructor
@@ -105,6 +114,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        PolylineOptions polyOptions = new PolylineOptions();
+        polyOptions.color(Color.GRAY);
+        polyOptions.width(5);
+        polyOptions.pattern(PATTERN_POLYGON_ALPHA);
+        track = mMap.addPolyline(polyOptions);
 
         Iterator<Runnable> iterator = runnables.iterator();
         while (iterator.hasNext()) {
@@ -221,10 +236,19 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
     }
 
+    public void drawPolyLineOnMap(LatLng latLng) {
+        if (track == null)
+            return;
+        List<LatLng> points = track.getPoints();
+        points.add(latLng);
+        track.setPoints(points);
+    }
 
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+
+        drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     @Override
