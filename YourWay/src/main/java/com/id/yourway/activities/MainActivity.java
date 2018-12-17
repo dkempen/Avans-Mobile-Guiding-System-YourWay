@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "onCreate: getGps successful");
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e);
+            AppContext.getInstance(this).getFeedbackManager().onGPSLost(this);
         }
     }
 
