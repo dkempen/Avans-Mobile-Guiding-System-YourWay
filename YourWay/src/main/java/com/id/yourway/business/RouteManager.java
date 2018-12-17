@@ -4,11 +4,16 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.business.listeners.DirectionsListener;
+import com.id.yourway.business.listeners.RoutesListener;
 import com.id.yourway.entities.Route;
-import com.id.yourway.providers.MovieCastDirectionsProvider;
+import com.id.yourway.entities.Sight;
 import com.id.yourway.providers.MovieCastDirectionsProviderV2;
+import com.id.yourway.providers.helpers.JsonLoaderHelper;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
-import com.id.yourway.providers.listeners.DirectionsProviderListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +21,56 @@ import java.util.List;
 public class RouteManager {
 
     private DatabaseManager databaseManager;
+    private SightManager sightManager;
     private DirectionsProvider directionsProvider;
-    private List<Route> routes;
+    private JSONObject jsonRoutes;
 
-    public RouteManager(Context context){
+    public RouteManager(Context context, SightManager sightManager){
         databaseManager = new DatabaseManager(context);
+        this.sightManager = sightManager;
+        jsonRoutes = JsonLoaderHelper.loadJsonFile(context, "json/BlindWallsRoutes.json");
         directionsProvider = new MovieCastDirectionsProviderV2(context);
-        routes = new ArrayList<>();
-        routes.add("Blindwallroute 1");
-        routes.add("Blindwallroute 2");
-        routes.add("VVV route");
     }
 
-    public List<Routes> getRoutes(){
-        return routes;
+    public void getRoutes(RoutesListener listener){
+        List<Route> routes = new ArrayList<>();
+
+        sightManager.getSights(sights -> {
+            try {
+                List<Route> route = new ArrayList<>();
+
+                List<Sight>  vvvRouteList = sights.subList(sights.size()-JsonLoaderHelper.VVV_ITEM_SIZE-1, sights.size()-1);
+                Route vvvRoute = new Route("kut vvv route", 1000, vvvRouteList);
+                route.add(vvvRoute);
+
+                List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
+
+                JSONArray routeJsonArray = jsonRoutes.getJSONArray("response");
+                for (int i = 0; i < routeJsonArray.length(); i++) {
+                    List<Sight> subSights = new ArrayList<>();
+                    JSONObject routeObject = routeJsonArray.getJSONObject(i);
+                    JSONArray sightArray = routeObject.getJSONArray("sights");
+                    for(int j = 0; j<sightArray.length(); j++){
+                        subSights.add(getSightById(sights,sightArray.getInt(j)));
+                    }
+                    route.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
+                }
+                listener.onReceivedRoutes(routes);
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private Sight getSightById(List<Sight> sights,int id){
+        for(Sight sight : sights){
+            if(sight.getId() == id){
+                return sight;
+            }
+        }
+        return  null;
+    }
+
 
     public void getDirections(List<LatLng> wayPoint, DirectionsListener listener){
         directionsProvider.queueDirectionsRequest(wayPoint, listener::onReceivedDirections);

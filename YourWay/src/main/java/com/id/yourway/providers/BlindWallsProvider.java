@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.entities.Sight;
+import com.id.yourway.providers.helpers.JsonLoaderHelper;
 import com.id.yourway.providers.interfaces.SightProvider;
 import com.id.yourway.providers.listeners.RestProviderListener;
 import com.id.yourway.providers.listeners.SightProviderListener;
@@ -21,14 +22,13 @@ import java.util.List;
 public class BlindWallsProvider implements SightProvider {
 
     private final RestProvider restProvider;
+    private JSONObject vvvItems;
     List<Sight> sights = new ArrayList<>();
-    InputStream is;
-    Context context;
 
 
     public BlindWallsProvider(Context context) {
         restProvider = RestProvider.getInstance(context);
-        this.context = context;
+        vvvItems = JsonLoaderHelper.loadJsonFile(context, "json/vvv.json");
     }
 
     @Override
@@ -64,8 +64,7 @@ public class BlindWallsProvider implements SightProvider {
                                 JSONArray imagesArray = wall.getJSONArray("images");
 
                                 List imageUrls = new ArrayList<String>();
-                                for (int j = 0; j < imagesArray.length(); j++)
-                                {
+                                for (int j = 0; j < imagesArray.length(); j++) {
                                     imageUrls.add("https://api.blindwalls.gallery/" +
                                             imagesArray.getJSONObject(j).getString("url"));
                                 }
@@ -77,9 +76,10 @@ public class BlindWallsProvider implements SightProvider {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        String json = loadJSONFromAsset();
+
                         try {
-                            JSONArray jsonObj = new JSONArray(json);
+                            int s1 = sights.size();
+                            JSONArray jsonObj = vvvItems.getJSONArray("response");
                             for (int i = 0; i < jsonObj.length(); i++) {
                                 JSONObject vvv = jsonObj.getJSONObject(i);
                                 int id = vvv.getInt("id");
@@ -94,8 +94,7 @@ public class BlindWallsProvider implements SightProvider {
                                 List<String> imageUrls2 = new ArrayList<String>();
                                 imageUrls2.add(String.valueOf(photoid));
 
-                                if(!name.equals(""))
-                                {
+                                if (!name.equals("")) {
                                     sights.add(new Sight(id, lat, lon, descriptionNL, descriptionEN, imageUrls2, name, "VVV"));
                                 }
                             }
@@ -114,19 +113,4 @@ public class BlindWallsProvider implements SightProvider {
                 }, false);
     }
 
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            is = context.getAssets().open("json/vvv.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 }

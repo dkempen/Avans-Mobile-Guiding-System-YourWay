@@ -21,7 +21,7 @@ public class AppContext {
 
     private AppContext(Context context) {
         sightManager = new SightManager(context);
-        routeManager = new RouteManager(context);
+        routeManager = new RouteManager(context, sightManager);
         feedbackManager = new FeedbackManager();
     }
 

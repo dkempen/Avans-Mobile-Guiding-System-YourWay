@@ -20,6 +20,8 @@ import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
+import com.id.yourway.fragments.IDetailFragment;
+import com.id.yourway.fragments.ListFragment;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.fragments.SightListFragment;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MapFragment mapFragment;
     private HelpFragment helpFragment;
-    private SightListFragment sightListFragment;
+    private ListFragment listFragment;
 
     List<DrawerItem> dataList;
     private android.support.v4.app.FragmentManager fragmentManager;
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         dataList = new ArrayList<>();
         instance = this;
         fragmentManager = getSupportFragmentManager();
+        listFragment = new ListFragment();
         mapFragment = new MapFragment();
-        sightListFragment = new SightListFragment();
         helpFragment = new HelpFragment();
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -77,12 +79,25 @@ public class MainActivity extends AppCompatActivity {
                                 mapFragment).addToBackStack(null).commitAllowingStateLoss();
                         break;
 
-                    case  R.id.routes_item:
+                    case  R.id.routes_item: {
+                        listFragment = new ListFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_ROUTES);
+                        listFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                listFragment).addToBackStack(null).commitAllowingStateLoss();
+                    }
                         break;
 
                     case  R.id.sight_item :
+                        {
+                        listFragment = new ListFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_SIGHT);
+                        listFragment.setArguments(args);
                         fragmentManager.beginTransaction().replace(R.id.fragment,
-                                sightListFragment).addToBackStack(null).commitAllowingStateLoss();
+                                listFragment).addToBackStack(null).commitAllowingStateLoss();
+                        }
                         break;
                     case  R.id.settings_item :
                         Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);

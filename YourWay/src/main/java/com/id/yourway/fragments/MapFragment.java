@@ -173,7 +173,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         Marker marker = mMap.addMarker(options);
         marker.setTag(sight);
-        marker.showInfoWindow();
+//        marker.showInfoWindow();
 
         markerSightMap.put(marker, sight);
     }

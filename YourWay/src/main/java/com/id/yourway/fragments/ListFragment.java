@@ -1,5 +1,6 @@
 package com.id.yourway.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
+import com.id.yourway.adapters.RouteListAdapter;
 import com.id.yourway.adapters.SightListAdapter;
 import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
@@ -32,7 +34,6 @@ public class ListFragment extends Fragment implements IDetailFragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SightListAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,27 +45,37 @@ public class ListFragment extends Fragment implements IDetailFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list, null, false);
-        Bundle arguments = getArguments();
-        int fragmentType = arguments.getInt("FRAG_TYPE");
-        if(fragmentType == IDetailFragment.FRAG_LIST_SIGHT) {
-            AppContext.getInstance(getContext()).getSightManager().getSights(sights -> createAndBindAdapterForSights(view, ));
-        }
-        else{
-            AppContext.getInstance(getContext()).getRouteManager().getRoutes();
-            createAndBindAdapterForRoutes(view, );
-        }
+
 
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Bundle arguments = getArguments();
+        int fragmentType = arguments.getInt("FRAGMENT_TYPE");
+        if(fragmentType == IDetailFragment.FRAG_LIST_SIGHT) {
+            AppContext.getInstance(getContext()).getSightManager().getSights(
+                    sights -> createAndBindAdapterForSights(getView(), sights )
+            );
+        }
+        else{
+            AppContext.getInstance(getContext()).getRouteManager().getRoutes(
+                    routes-> {createAndBindAdapterForRoutes(getView(), routes);}
+            );
+
+        }
+    }
+
     public void createAndBindAdapterForSights(View view, List<Sight> sights) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.list_recyclerview_id);
+        mRecyclerView = view.findViewById(R.id.list_recyclerview_id);
         mRecyclerView.setHasFixedSize(true);
 
 
         //specify an adapter
-        mAdapter = new SightListAdapter(getContext(), sights);
-        mRecyclerView.setAdapter(mAdapter);
+        SightListAdapter adapter = new SightListAdapter(getContext(), sights);
+        mRecyclerView.setAdapter(adapter);
 
         //linear layout
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -72,7 +83,16 @@ public class ListFragment extends Fragment implements IDetailFragment {
     }
 
     public void createAndBindAdapterForRoutes(View view, List<Route> routes){
+        mRecyclerView = view.findViewById(R.id.list_recyclerview_id);
+        mRecyclerView.setHasFixedSize(true);
+        RouteListAdapter adapter = new RouteListAdapter(getContext(), routes);
+        mRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
+
+        //linear layout
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
 }
