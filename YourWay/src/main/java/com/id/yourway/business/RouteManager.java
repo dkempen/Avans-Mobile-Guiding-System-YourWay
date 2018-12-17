@@ -2,6 +2,7 @@ package com.id.yourway.business;
 
 import android.content.Context;
 
+import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.business.listeners.DirectionsListener;
 import com.id.yourway.business.listeners.RoutesListener;
@@ -10,6 +11,8 @@ import com.id.yourway.entities.Sight;
 import com.id.yourway.providers.MovieCastDirectionsProviderV2;
 import com.id.yourway.providers.helpers.JsonLoaderHelper;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
+import com.id.yourway.providers.listeners.DirectionsProviderListener;
+import com.id.yourway.providers.listeners.SightProviderListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,29 +38,37 @@ public class RouteManager {
     public void getRoutes(RoutesListener listener){
         List<Route> routes = new ArrayList<>();
 
-        sightManager.getSights(sights -> {
-            try {
-                List<Route> route = new ArrayList<>();
+        sightManager.getSights(new SightProviderListener() {
+            @Override
+            public void onSightsAvailable(List<Sight> sights) {
+                try {
+                    List<Route> route = new ArrayList<>();
 
-                List<Sight>  vvvRouteList = sights.subList(sights.size()-JsonLoaderHelper.VVV_ITEM_SIZE-1, sights.size()-1);
-                Route vvvRoute = new Route("kut vvv route", 1000, vvvRouteList);
-                route.add(vvvRoute);
+                    List<Sight>  vvvRouteList = sights.subList(sights.size()-JsonLoaderHelper.VVV_ITEM_SIZE-1, sights.size()-1);
+                    Route vvvRoute = new Route("kut vvv route", 1000, vvvRouteList);
+                    route.add(vvvRoute);
 
-                List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
+                    List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
 
-                JSONArray routeJsonArray = jsonRoutes.getJSONArray("response");
-                for (int i = 0; i < routeJsonArray.length(); i++) {
-                    List<Sight> subSights = new ArrayList<>();
-                    JSONObject routeObject = routeJsonArray.getJSONObject(i);
-                    JSONArray sightArray = routeObject.getJSONArray("sights");
-                    for(int j = 0; j<sightArray.length(); j++){
-                        subSights.add(getSightById(sights,sightArray.getInt(j)));
+                    JSONArray routeJsonArray = jsonRoutes.getJSONArray("response");
+                    for (int i = 0; i < routeJsonArray.length(); i++) {
+                        List<Sight> subSights = new ArrayList<>();
+                        JSONObject routeObject = routeJsonArray.getJSONObject(i);
+                        JSONArray sightArray = routeObject.getJSONArray("sights");
+                        for(int j = 0; j<sightArray.length(); j++){
+                            subSights.add(getSightById(sights,sightArray.getInt(j)));
+                        }
+                        route.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
                     }
-                    route.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
+                    listener.onReceivedRoutes(routes);
+                }catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                listener.onReceivedRoutes(routes);
-            }catch (JSONException e) {
-                e.printStackTrace();
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+
             }
         });
     }

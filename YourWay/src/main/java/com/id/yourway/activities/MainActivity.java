@@ -74,37 +74,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences1.edit();
             editor.putBoolean("firstStart", false);
         }
-                    case  R.id.routes_item: {
-                        listFragment = new ListFragment();
-                        Bundle args = new Bundle();
-                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_ROUTES);
-                        listFragment.setArguments(args);
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                listFragment).addToBackStack(null).commitAllowingStateLoss();
-                    }
-                        break;
 
-                    case  R.id.sight_item :
-                        {
-                        listFragment = new ListFragment();
-                        Bundle args = new Bundle();
-                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_SIGHT);
-                        listFragment.setArguments(args);
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                listFragment).addToBackStack(null).commitAllowingStateLoss();
-                        }
-                        break;
-                    case  R.id.settings_item :
-                        Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
-                        startActivity(intent2);
-                        break;
-                    case  R.id.help_item :
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                helpFragment).addToBackStack(null).commitAllowingStateLoss();
-                        break;
-                }
-                if (item.getGroupId() == R.id.top_group_drawer)
-                    drawerLayout.closeDrawers();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -114,12 +84,25 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().replace(R.id.fragment,
                             mapFragment).addToBackStack(null).commitAllowingStateLoss();
                     break;
-                case R.id.routes_item:
-                    break;
-                case R.id.sight_item:
+                case  R.id.routes_item: {
+                    listFragment = new ListFragment();
+                    Bundle args = new Bundle();
+                    args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_ROUTES);
+                    listFragment.setArguments(args);
                     fragmentManager.beginTransaction().replace(R.id.fragment,
-                            sightListFragment).addToBackStack(null).commitAllowingStateLoss();
-                    break;
+                            listFragment).addToBackStack(null).commitAllowingStateLoss();
+                }
+                break;
+
+                case  R.id.sight_item :
+                {
+                    listFragment = new ListFragment();
+                    Bundle args = new Bundle();
+                    args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_SIGHT);
+                    listFragment.setArguments(args);
+                    fragmentManager.beginTransaction().replace(R.id.fragment,
+                            listFragment).addToBackStack(null).commitAllowingStateLoss();
+                }
                 case R.id.settings_item:
                     Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
                     startActivity(intent2);

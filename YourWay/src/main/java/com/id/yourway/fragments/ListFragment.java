@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.adapters.RouteListAdapter;
@@ -56,9 +57,17 @@ public class ListFragment extends Fragment implements IDetailFragment {
         Bundle arguments = getArguments();
         int fragmentType = arguments.getInt("FRAGMENT_TYPE");
         if(fragmentType == IDetailFragment.FRAG_LIST_SIGHT) {
-            AppContext.getInstance(getContext()).getSightManager().getSights(
-                    sights -> createAndBindAdapterForSights(getView(), sights )
-            );
+            AppContext.getInstance(getContext()).getSightManager().getSights(new SightProviderListener() {
+                @Override
+                public void onSightsAvailable(List<Sight> sights) {
+                    createAndBindAdapterForSights(getView(), sights );
+                }
+
+                @Override
+                public void onError(VolleyError error) {
+
+                }
+            });
         }
         else{
             AppContext.getInstance(getContext()).getRouteManager().getRoutes(
