@@ -59,7 +59,6 @@
             android:name=".activities.PreferencesActivity"
             android:label="@string/title_activity_preferences"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.ListActivity"></activity>
     </application>
 
 </manifest>
