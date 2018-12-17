@@ -2,6 +2,8 @@ package com.id.yourway.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -51,6 +53,10 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
 
         } else if(sight.getType().equals("VVV"))
         {
+            Drawable dw = viewHolder.thumbnail.getDrawable();
+            if(dw instanceof  BitmapDrawable){
+                ((BitmapDrawable)dw).getBitmap().recycle();
+            }
             String imageUrl = "" + sight.getImages().get(0);
             int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
             viewHolder.thumbnail.setImageResource(resid);
@@ -68,16 +74,16 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
     }
 
     private void tryImages(int index, Sight sight, SightViewHolder holder) {
-        String url;
+        String url = null;
 
         if(sight.getType().equals("Blindwall")) {
             try {
                 url = sight.getImages().get(index);
-                Log.d(TAG, "https://api.blindwalls.gallery/" + sight.getImages().get(index));
+                //Log.d(TAG, "https://api.blindwalls.gallery/" + sight.getImages().get(index));
             } catch (IndexOutOfBoundsException e) {
                 Picasso.get().load(R.drawable.no_image_available).placeholder(R.drawable.placeholder).into(holder.thumbnail);
                 Log.d(TAG, "tryImages: no image available for: " + sight.getTitle());
-                return;
+                //return;
             }
 
             final int finalIndex = index + 1;
@@ -94,6 +100,9 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
                     tryImages(finalIndex, sight, holder);
                 }
             });
+        }
+        else{
+
         }
     }
 

@@ -96,7 +96,6 @@ public class ListFragment extends Fragment implements IDetailFragment {
         mRecyclerView.setHasFixedSize(true);
         RouteListAdapter adapter = new RouteListAdapter(getContext(), routes);
         mRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
 
         //linear layout

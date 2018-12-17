@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().replace(R.id.fragment,
                             listFragment).addToBackStack(null).commitAllowingStateLoss();
                 }
+                break;
                 case R.id.settings_item:
                     Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
                     startActivity(intent2);
