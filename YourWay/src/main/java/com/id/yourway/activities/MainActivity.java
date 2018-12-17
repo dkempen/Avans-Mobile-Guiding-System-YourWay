@@ -16,11 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.fragments.SightListFragment;
+import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -140,15 +142,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateSights() {
-        AppContext.getInstance(this).getSightManager().getSights(sights -> {
-            mapFragment.removeMarkers();
-            sightMap = new HashMap<>();
-            for (Sight sight : sights) {
-                sightMap.put("" + sight.getId(), sight);
-                mapFragment.addSight(sight);
-            }
-            setSights(sights);
-        });
+        AppContext.getInstance(this)
+                .getSightManager()
+                .getSights(new SightProviderListener() {
+                    @Override
+                    public void onSightsAvailable(List<Sight> sights) {
+                        mapFragment.removeMarkers();
+                        sightMap = new HashMap<>();
+                        for (Sight sight : sights) {
+                            sightMap.put("" + sight.getId(), sight);
+                            mapFragment.addSight(sight);
+                        }
+                        setSights(sights);
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+                        AppContext.getInstance(getBaseContext())
+                                .getFeedbackManager()
+                                .onError(getBaseContext(), String.valueOf(error));
+                    }
+                });
     }
 
     public void setSights(List<Sight> sightslist) {

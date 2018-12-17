@@ -52,7 +52,9 @@ public class SightListFragment extends Fragment implements IDetailFragment {
 
                     @Override
                     public void onError(VolleyError error) {
-                        
+                        AppContext.getInstance(getContext())
+                                .getFeedbackManager()
+                                .onError(getContext(), String.valueOf(error));
                     }
                 });
 

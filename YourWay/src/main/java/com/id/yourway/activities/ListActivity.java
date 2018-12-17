@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
+import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.adapters.SightListAdapter;
 import com.id.yourway.entities.Sight;
@@ -78,6 +79,13 @@ public class ListActivity extends AppCompatActivity {
                 setSights(sights);
                 if(getSights() != null)
                     createRecyclerView();
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                AppContext.getInstance(getBaseContext())
+                        .getFeedbackManager()
+                        .onError(getBaseContext(), String.valueOf(error));
             }
         });
     }
