@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,14 @@ import android.widget.TextView;
 import com.id.yourway.R;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.entities.Sight;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.SightViewHolder>{
+    private final static String TAG = SightListAdapter.class.getSimpleName();
+
 
     private List<Sight> sights;
     private Context context;
@@ -36,9 +39,14 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
     @Override
     public void onBindViewHolder(@NonNull final SightViewHolder viewHolder, int position) {
         Sight sight = sights.get(position);
-        viewHolder.nameTextView.setText(sight.getAuthor());
-        String imageUrl = sight.getImages().get(0);
-        Picasso.get().load(imageUrl).into(viewHolder.imageView);
+
+        if(sight.getTitle() != null)
+            viewHolder.title.setText(sight.getTitle().replaceAll("\\r\\n|\\r|\\n", " "));
+        else
+            viewHolder.title.setText(sight.getAuthor().replaceAll("\\r\\n|\\r|\\n", " "));
+
+
+        tryImages(0, sight, viewHolder);
     }
 
     @NonNull
@@ -51,17 +59,50 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
         return new SightViewHolder(v, context);
     }
 
+    private void tryImages(int index, Sight sight, SightViewHolder holder) {
+        String url;
+
+        if(sight.getType().equals("Blindwall")) {
+            try {
+                url = sight.getImages().get(index);
+                Log.d(TAG, "https://api.blindwalls.gallery/" + sight.getImages().get(index));
+            } catch (IndexOutOfBoundsException e) {
+                Picasso.get().load(R.drawable.no_image_available).placeholder(R.drawable.placeholder).into(holder.thumbnail);
+                Log.d(TAG, "tryImages: no image available for: " + sight.getTitle());
+                return;
+            }
+
+            final int finalIndex = index + 1;
+
+            Picasso.get().load(url).placeholder(R.drawable.placeholder).into(holder.thumbnail, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "onSuccess: " + sight.getTitle());
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Log.d(TAG, "onError: " + sight.getTitle());
+                    tryImages(finalIndex, sight, holder);
+                }
+            });
+        }
+        else{
+            context.getResources().getIdentifier("YourWay:drawable/" + sight.getImages().get(0), null, null);
+        }
+    }
+
     public class SightViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameTextView;
-        ImageView imageView;
+        TextView title;
+        ImageView thumbnail;
 
         public SightViewHolder(View itemView, final Context ctx) {
             super(itemView);
             context = ctx;
 
-            nameTextView = itemView.findViewById(R.id.item_sight_name_id);
-            imageView = itemView.findViewById(R.id.item_sight_imageView);
+            title = itemView.findViewById(R.id.item_sight_name_id);
+            thumbnail = itemView.findViewById(R.id.item_sight_imageView);
 
             //OnClick listener voor cardview item.
             itemView.setOnClickListener((View v) -> {

@@ -3,6 +3,8 @@ package com.id.yourway.adapters;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,14 +13,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+    private final static String TAG = CustomInfoWindowAdapter.class.getSimpleName();
 
     private Context context;
+    private Resources res;
 
     public CustomInfoWindowAdapter(Context ctx){
         context = ctx;
@@ -37,13 +42,10 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         String authorString = sight.getAuthor();
         String addressString = sight.getAddress();
         ImageView imageView = view.findViewById(R.id.imageView3);
-        if(sight.getType() == "Blindwall")
-        {
-            Picasso.get()
-                    .load(sight.getImages().get(0))
-                    .into(imageView);
+        if(sight.getType() == "Blindwall") {
+            tryImages(0 ,  sight,  imageView);
         }
-        else if(sight.getType() == "VVV")
+        else
         {
             String imageUrl = "" + sight.getImages().get(0);
             int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
@@ -57,5 +59,19 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         address.setText(addressString);
 
         return view;
+    }
+
+    private void tryImages(int index, Sight sight, ImageView view) {
+        Picasso.get().load(sight.getImages().get(index)).placeholder(R.drawable.placeholder).into(view, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "onSuccess: " + sight.getTitle());
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d(TAG, "onError: " + sight.getTitle());
+            }
+        });
     }
 }
