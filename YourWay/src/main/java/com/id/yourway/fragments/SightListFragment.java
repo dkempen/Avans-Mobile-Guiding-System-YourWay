@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.adapters.SightListAdapter;
@@ -38,11 +39,24 @@ public class SightListFragment extends Fragment implements IDetailFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_list, null, false);
-        AppContext.getInstance(getContext()).getSightManager().getSights(sights -> {
-            setSights(sights);
-            if(getSights() != null)
-                createRecyclerView(view);
-        });
+
+        AppContext.getInstance(getContext())
+                .getSightManager()
+                .getSights(new SightProviderListener() {
+                    @Override
+                    public void onSightsAvailable(List<Sight> sights) {
+                        setSights(sights);
+                        if(getSights() != null)
+                            createRecyclerView(view);
+                    }
+
+                    @Override
+                    public void onError(VolleyError error) {
+                        AppContext.getInstance(getContext())
+                                .getFeedbackManager()
+                                .onError(getContext(), String.valueOf(error));
+                    }
+                });
 
         Log.d(TAG, "onCreateView: ");
         return view;

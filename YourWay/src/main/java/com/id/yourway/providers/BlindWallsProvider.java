@@ -104,7 +104,7 @@ public class BlindWallsProvider implements SightProvider {
 
                     @Override
                     public void onRequestError(VolleyError error) {
-                        // TODO: Error handling of BlindWallsAPI
+                        listener.onError(error);
                     }
                 }, false);
     }

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
 import com.id.yourway.entities.Sight;
@@ -186,6 +187,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
             }
         }
+        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
         return null;
     }
 
@@ -238,7 +240,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
+
+    }
 
     @Override
     public void onCameraMove() {}
