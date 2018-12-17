@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
+import com.id.yourway.activities.MainActivity;
 import com.id.yourway.adapters.SightListAdapter;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.providers.listeners.SightProviderListener;
@@ -32,6 +33,13 @@ public class SightListFragment extends Fragment implements IDetailFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setToolbarTitle(getString(R.string.sightFragmentTitle));
     }
 
     @Nullable
