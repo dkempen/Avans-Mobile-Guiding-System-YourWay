@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="76dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
         android:id="@+id/item_cardview_sight_id"
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text2"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toBottomOf="@id/item_route_name"
@@ -50,7 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Text3"
-                android:textSize="10sp"
+                android:layout_marginLeft="40dp"
+                android:textSize="12sp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@id/item_route_name"
                 app:layout_constraintBottom_toBottomOf="parent"

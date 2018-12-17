@@ -33,8 +33,8 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
     public void onBindViewHolder(@NonNull RouteViewHolder routeViewHolder, int i) {
         Route  currentRoute = routes.get(i);
         routeViewHolder.nameTextView.setText(currentRoute.getName());
-        routeViewHolder.lengthKmTextView.setText(Double.toString(currentRoute.getLengthInKm()));
-        routeViewHolder.numberOfPOIS.setText(Integer.toString(currentRoute.getSights().size()));
+        routeViewHolder.lengthKmTextView.setText(Double.toString(currentRoute.getLengthInKm())+" km");
+        routeViewHolder.numberOfPOIS.setText(Integer.toString(currentRoute.getSights().size())+" POI's");
     }
 
 

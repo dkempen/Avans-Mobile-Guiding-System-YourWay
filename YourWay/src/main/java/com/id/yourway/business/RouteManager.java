@@ -42,11 +42,10 @@ public class RouteManager {
             @Override
             public void onSightsAvailable(List<Sight> sights) {
                 try {
-                    List<Route> route = new ArrayList<>();
 
                     List<Sight>  vvvRouteList = sights.subList(sights.size()-JsonLoaderHelper.VVV_ITEM_SIZE-1, sights.size()-1);
                     Route vvvRoute = new Route("kut vvv route", 1000, vvvRouteList);
-                    route.add(vvvRoute);
+                    routes.add(vvvRoute);
 
                     List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
 
@@ -58,7 +57,7 @@ public class RouteManager {
                         for(int j = 0; j<sightArray.length(); j++){
                             subSights.add(getSightById(sights,sightArray.getInt(j)));
                         }
-                        route.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
+                        routes.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
                     }
                     listener.onReceivedRoutes(routes);
                 }catch (JSONException e) {
