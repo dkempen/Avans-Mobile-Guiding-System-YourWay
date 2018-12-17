@@ -15,6 +15,7 @@ import com.id.yourway.R;
 
 public class PreferencesActivity extends AppCompatActivity {
 
+    public static boolean Vibrate = true;
     Vibrator vibrator;
 
     @Override
@@ -24,29 +25,19 @@ public class PreferencesActivity extends AppCompatActivity {
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Switch vibrateSwitch = findViewById(R.id.VibrateSwitch);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !notificationManager.isNotificationPolicyAccessGranted()) {
-
-            Intent intent = new Intent(
-                    android.provider.Settings
-                            .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-
-            startActivity(intent);
-        }
-
-
         vibrateSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AudioManager aManager=(AudioManager)getSystemService(AUDIO_SERVICE);
                 if (vibrateSwitch.isEnabled()) {
-                    aManager.setRingerMode(aManager.VIBRATE_SETTING_ONLY_SILENT);
+                    Vibrate = false;
                     System.out.println("nee");
                 }
             }
         });
+    }
+
+    public static boolean isVibrate() {
+        return Vibrate;
     }
 }
