@@ -29,7 +29,7 @@ public class SightListFragment extends Fragment implements IDetailFragment {
     private List<Sight> sights;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
@@ -45,7 +45,6 @@ public class SightListFragment extends Fragment implements IDetailFragment {
         });
 
         Log.d(TAG, "onCreateView: ");
-
         return view;
     }
 
