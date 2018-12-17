@@ -89,8 +89,10 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent2);
                         break;
                     case  R.id.help_item :
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                helpFragment).addToBackStack(null).commitAllowingStateLoss();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction ft = fragmentManager.beginTransaction();
+                        HelpFragment helpFragment = new HelpFragment();
+                        helpFragment.show(ft, "HELP");
                         break;
                 }
                 if (item.getGroupId() == R.id.top_group_drawer)
