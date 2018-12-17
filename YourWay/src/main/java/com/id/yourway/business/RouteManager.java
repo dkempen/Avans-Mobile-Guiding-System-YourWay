@@ -31,7 +31,17 @@ public class RouteManager {
     }
 
     public void getDirections(List<LatLng> wayPoint, DirectionsListener listener){
-        directionsProvider.queueDirectionsRequest(wayPoint, listener::onReceivedDirections);
+        directionsProvider.queueDirectionsRequest(wayPoint, new DirectionsProviderListener() {
+            @Override
+            public void onReceivedDirections(List<LatLng> directionList) {
+                listener.onReceivedDirections(directionList);
+            }
+
+            @Override
+            public void onError(Error error) {
+                listener.onError(error);
+            }
+        });
     }
 
     public void storeRouteProgression(String routeName, int progression){
