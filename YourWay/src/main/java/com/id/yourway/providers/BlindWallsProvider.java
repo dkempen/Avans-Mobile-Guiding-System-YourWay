@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.entities.Sight;
+import com.id.yourway.providers.helpers.JsonLoaderHelper;
 import com.id.yourway.providers.interfaces.SightProvider;
 import com.id.yourway.providers.listeners.RestProviderListener;
 import com.id.yourway.providers.listeners.SightProviderListener;
@@ -20,12 +21,12 @@ import java.util.List;
 public class BlindWallsProvider implements SightProvider {
 
     private final RestProvider restProvider;
-    private List<Sight> sights = new ArrayList<>();
-    private Context context;
+    private JSONObject vvvItems;
+    List<Sight> sights = new ArrayList<>();
 
     public BlindWallsProvider(Context context) {
         restProvider = RestProvider.getInstance(context);
-        this.context = context;
+        vvvItems = JsonLoaderHelper.loadJsonFile(context, "json/vvv.json");
     }
 
     @Override
@@ -72,9 +73,10 @@ public class BlindWallsProvider implements SightProvider {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        String json = loadJSONFromAsset();
+
                         try {
-                            JSONArray jsonObj = new JSONArray(json);
+                            int s1 = sights.size();
+                            JSONArray jsonObj = vvvItems.getJSONArray("response");
                             for (int i = 0; i < jsonObj.length(); i++) {
                                 JSONObject vvv = jsonObj.getJSONObject(i);
                                 int id = vvv.getInt("id");
@@ -109,19 +111,4 @@ public class BlindWallsProvider implements SightProvider {
                 }, false);
     }
 
-    private String loadJSONFromAsset() {
-        String json;
-        try {
-            InputStream is = context.getAssets().open("json/vvv.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
 }

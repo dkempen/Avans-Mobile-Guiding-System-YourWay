@@ -104,7 +104,6 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
 
         public SightViewHolder(View itemView, final Context ctx) {
             super(itemView);
-            context = ctx;
 
             title = itemView.findViewById(R.id.item_sight_name_id);
             thumbnail = itemView.findViewById(R.id.item_sight_imageView);

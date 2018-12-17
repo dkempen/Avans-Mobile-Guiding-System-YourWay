@@ -21,6 +21,8 @@ import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
+import com.id.yourway.fragments.IDetailFragment;
+import com.id.yourway.fragments.ListFragment;
 import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.fragments.SightListFragment;
 import com.id.yourway.providers.listeners.SightProviderListener;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private MapFragment mapFragment;
     private HelpFragment helpFragment;
-    private SightListFragment sightListFragment;
+    private ListFragment listFragment;
 
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         updateSights();
         //NavigationDrawer
         fragmentManager = getSupportFragmentManager();
+        listFragment = new ListFragment();
         mapFragment = new MapFragment();
-        sightListFragment = new SightListFragment();
         helpFragment = new HelpFragment();
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -71,9 +73,38 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences preferences1 = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences1.edit();
             editor.putBoolean("firstStart", false);
-            editor.apply();
         }
+                    case  R.id.routes_item: {
+                        listFragment = new ListFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_ROUTES);
+                        listFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                listFragment).addToBackStack(null).commitAllowingStateLoss();
+                    }
+                        break;
 
+                    case  R.id.sight_item :
+                        {
+                        listFragment = new ListFragment();
+                        Bundle args = new Bundle();
+                        args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_SIGHT);
+                        listFragment.setArguments(args);
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                listFragment).addToBackStack(null).commitAllowingStateLoss();
+                        }
+                        break;
+                    case  R.id.settings_item :
+                        Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case  R.id.help_item :
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                helpFragment).addToBackStack(null).commitAllowingStateLoss();
+                        break;
+                }
+                if (item.getGroupId() == R.id.top_group_drawer)
+                    drawerLayout.closeDrawers();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
