@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
+import com.id.yourway.activities.PreferencesActivity;
+
 class HapticManager {
     void vibrate(Context context) {
         new Thread(() -> {
@@ -13,7 +15,7 @@ class HapticManager {
             int loops = 3;
             int delay = 250;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && PreferencesActivity.isVibrate()) {
                 for (int i = 0; i < loops; i++) {
                     v.vibrate(VibrationEffect.createOneShot(delay, VibrationEffect.DEFAULT_AMPLITUDE));
                     try {
