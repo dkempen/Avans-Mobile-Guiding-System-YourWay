@@ -196,7 +196,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
             }
         }
-        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
+//        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
         return null;
     }
 
