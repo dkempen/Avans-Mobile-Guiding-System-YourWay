@@ -28,6 +28,7 @@ public class PreferencesActivity  extends AppCompatActivity {
                 if (vibrateSwitch.isEnabled()) {
                     aManager.setRingerMode(aManager.RINGER_MODE_SILENT);
                     System.out.println("nee");
+
                 }
             }
         });
