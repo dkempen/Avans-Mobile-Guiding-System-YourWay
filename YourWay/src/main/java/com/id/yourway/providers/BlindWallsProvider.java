@@ -35,44 +35,44 @@ public class BlindWallsProvider implements SightProvider {
                 new RestProviderListener() {
                     @Override
                     public void onRequestObjectAvailible(JSONObject response) {
-//                        try {
-//                            JSONArray array = response.getJSONArray("response");
-//
-//                            for (int i = 0; i < array.length(); i++) {
-//                                JSONObject wall = array.getJSONObject(i);
-//
-//                                int id = wall.getInt("id");
-//                                long date = wall.getLong("date");
-//                                double latitude = wall.getDouble("latitude");
-//                                double longitude = wall.getDouble("longitude");
-//                                String address = wall.getString("address");
-//                                String videoUrl = wall.getString("videoUrl");
-//                                String photographer = wall.getString("photographer");
-//                                String author = wall.getString("author");
-//                                String titleNL = wall.getJSONObject("title").getString("nl");
-//                                String titleEN = wall.getJSONObject("title").getString("en");
-//                                String descriptionNL = wall.getJSONObject("description").getString("nl");
-//                                String descriptionEN = wall.getJSONObject("description").getString("en");
-//                                String materialNL = wall.getJSONObject("material").getString("nl");
-//                                String materialEN = wall.getJSONObject("material").getString("en");
-//                                String catogoryNL = wall.getJSONObject("category").getString("nl");
-//                                String catogoryEN = wall.getJSONObject("category").getString("en");
-//
-//                                JSONArray imagesArray = wall.getJSONArray("images");
-//
-//                                List imageUrls = new ArrayList<String>();
-//                                for (int j = 0; j < imagesArray.length(); j++) {
-//                                    imageUrls.add("https://api.blindwalls.gallery/" +
-//                                            imagesArray.getJSONObject(j).getString("url"));
-//                                }
-//
-//                                sights.add(new Sight(id, date, latitude, longitude, address, videoUrl,
-//                                        photographer, author, titleNL, titleEN, descriptionNL, descriptionEN,
-//                                        materialNL, materialEN, catogoryNL, catogoryEN, imageUrls, "Blindwall"));
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
+                        try {
+                            JSONArray array = response.getJSONArray("response");
+
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject wall = array.getJSONObject(i);
+
+                                int id = wall.getInt("id");
+                                long date = wall.getLong("date");
+                                double latitude = wall.getDouble("latitude");
+                                double longitude = wall.getDouble("longitude");
+                                String address = wall.getString("address");
+                                String videoUrl = wall.getString("videoUrl");
+                                String photographer = wall.getString("photographer");
+                                String author = wall.getString("author");
+                                String titleNL = wall.getJSONObject("title").getString("nl");
+                                String titleEN = wall.getJSONObject("title").getString("en");
+                                String descriptionNL = wall.getJSONObject("description").getString("nl");
+                                String descriptionEN = wall.getJSONObject("description").getString("en");
+                                String materialNL = wall.getJSONObject("material").getString("nl");
+                                String materialEN = wall.getJSONObject("material").getString("en");
+                                String catogoryNL = wall.getJSONObject("category").getString("nl");
+                                String catogoryEN = wall.getJSONObject("category").getString("en");
+
+                                JSONArray imagesArray = wall.getJSONArray("images");
+
+                                List imageUrls = new ArrayList<String>();
+                                for (int j = 0; j < imagesArray.length(); j++) {
+                                    imageUrls.add("https://api.blindwalls.gallery/" +
+                                            imagesArray.getJSONObject(j).getString("url"));
+                                }
+
+                                sights.add(new Sight(id, date, latitude, longitude, address, videoUrl,
+                                        photographer, author, titleNL, titleEN, descriptionNL, descriptionEN,
+                                        materialNL, materialEN, catogoryNL, catogoryEN, imageUrls, "Blindwall"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                         try {
                             int s1 = sights.size();
