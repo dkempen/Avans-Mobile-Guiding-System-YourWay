@@ -2,6 +2,8 @@ package com.id.yourway.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import java.util.List;
 public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.SightViewHolder>{
     private final static String TAG = SightListAdapter.class.getSimpleName();
 
+    //private LR
 
     private List<Sight> sights;
     private Context context;
@@ -41,11 +44,16 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
     @Override
     public void onBindViewHolder(@NonNull final SightViewHolder viewHolder, int position) {
         Sight sight = sights.get(position);
+        if(viewHolder.thumbnail != null) {
+            viewHolder.thumbnail.setImageDrawable(null);
+        }
 
         if(sight.getTitle() != null)
             viewHolder.title.setText(sight.getTitle().replaceAll("\\r\\n|\\r|\\n", " "));
         else
             viewHolder.title.setText(sight.getAuthor().replaceAll("\\r\\n|\\r|\\n", " "));
+
+
 
         if(sight.getType().equals("Blindwall"))
         {
@@ -53,14 +61,44 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
 
         } else if(sight.getType().equals("VVV"))
         {
-            Drawable dw = viewHolder.thumbnail.getDrawable();
-            if(dw instanceof  BitmapDrawable){
-                ((BitmapDrawable)dw).getBitmap().recycle();
-            }
+
             String imageUrl = "" + sight.getImages().get(0);
             int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
-            viewHolder.thumbnail.setImageResource(resid);
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeResource(context.getResources(), resid, options);
+
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, 100, 100);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+            Bitmap bmp =  BitmapFactory.decodeResource(context.getResources(), resid, options);
+            viewHolder.thumbnail.setImageBitmap(bmp);
         }
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     @NonNull
