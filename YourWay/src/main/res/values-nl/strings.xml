@@ -9,7 +9,6 @@
     <string name="pref_title_display_name">Weergave naam</string>
     <string name="pref_default_display_name">Piet ppan</string>
     <string name="pref_title_add_friends_to_messages">Voeg mensen toe aan het bericht</string>
-    <string name="moviecast_directions_api_key">ee5dcca8-71c5-4679-b81a-5744b1e87a31</string>
     <string name="pref_header_data_sync">Vernieuwen</string>
     <string name="pref_title_sync_frequency">Verniew snelheid</string>
     <string name="pref_title_system_sync_settings">Systeem vernieuw settings</string>
