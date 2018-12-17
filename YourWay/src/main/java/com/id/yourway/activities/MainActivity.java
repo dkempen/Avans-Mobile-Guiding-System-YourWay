@@ -2,7 +2,6 @@ package com.id.yourway.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
@@ -29,36 +27,26 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = MapFragment.class.getSimpleName();
 
-    private static MainActivity instance;
-
-    public static MainActivity getInstance() {
-        return instance;
-    }
     private Map<String, Sight> sightMap = new HashMap<>();
 
     private DrawerLayout drawerLayout;
-
     private MapFragment mapFragment;
     private HelpFragment helpFragment;
     private SightListFragment sightListFragment;
 
-    List<DrawerItem> dataList;
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupToolbar();
         updateSights();
-        long id =  Thread.currentThread().getId();
         //NavigationDrawer
-        dataList = new ArrayList<>();
-        instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
         sightListFragment = new SightListFragment();
@@ -67,45 +55,38 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.maps_item:
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                mapFragment).addToBackStack(null).commitAllowingStateLoss();
-                        break;
-
-                    case  R.id.routes_item:
-                        break;
-
-                    case  R.id.sight_item :
-                        fragmentManager.beginTransaction().replace(R.id.fragment,
-                                sightListFragment).addToBackStack(null).commitAllowingStateLoss();
-                        break;
-                    case  R.id.settings_item :
-                        Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
-                        startActivity(intent2);
-                        break;
-                    case  R.id.help_item :
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction ft = fragmentManager.beginTransaction();
-                        HelpFragment helpFragment = new HelpFragment();
-                        helpFragment.show(ft, "HELP");
-                        break;
-                }
-                if (item.getGroupId() == R.id.top_group_drawer)
-                    drawerLayout.closeDrawers();
-
-                return true;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.maps_item:
+                    fragmentManager.beginTransaction().replace(R.id.fragment,
+                            mapFragment).addToBackStack(null).commitAllowingStateLoss();
+                    break;
+                case R.id.routes_item:
+                    break;
+                case R.id.sight_item:
+                    fragmentManager.beginTransaction().replace(R.id.fragment,
+                            sightListFragment).addToBackStack(null).commitAllowingStateLoss();
+                    break;
+                case R.id.settings_item:
+                    Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
+                    startActivity(intent2);
+                    break;
+                case R.id.help_item:
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction ft = fragmentManager.beginTransaction();
+                    HelpFragment helpFragment = new HelpFragment();
+                    helpFragment.show(ft, "HELP");
+                    break;
             }
+            if (item.getGroupId() == R.id.top_group_drawer)
+                drawerLayout.closeDrawers();
+            return true;
         });
 
         fragmentManager.beginTransaction().replace(R.id.fragment, mapFragment).commit();
 
         try {
-            mapFragment.getGps();
+            mapFragment.getGps(this);
             Log.i(TAG, "onCreate: getGps successful");
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e);
@@ -167,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
-
         return super.onOptionsItemSelected(menuItem);
     }
 }

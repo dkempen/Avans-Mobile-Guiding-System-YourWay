@@ -6,6 +6,7 @@ import com.shashank.sony.fancytoastlib.FancyToast;
 
 class ToastManager {
     void displayToast(Context context, String message, boolean longTime) {
-        FancyToast.makeText(context, message, FancyToast.LENGTH_LONG, FancyToast.WARNING, false).show();
+        FancyToast.makeText(context, message, longTime ? FancyToast.LENGTH_LONG :
+                FancyToast.LENGTH_SHORT, FancyToast.WARNING, false).show();
     }
 }

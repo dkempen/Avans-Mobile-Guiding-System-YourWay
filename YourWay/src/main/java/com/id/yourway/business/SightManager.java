@@ -8,7 +8,7 @@ import com.id.yourway.providers.listeners.SightProviderListener;
 
 public class SightManager {
 
-    SightProvider sightProvider;
+    private SightProvider sightProvider;
 
     public SightManager(Context context) {
         sightProvider = new BlindWallsProvider(context);

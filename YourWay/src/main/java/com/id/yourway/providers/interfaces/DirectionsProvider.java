@@ -6,8 +6,5 @@ import com.id.yourway.providers.listeners.DirectionsProviderListener;
 import java.util.List;
 
 public interface DirectionsProvider {
-
     void queueDirectionsRequest(List<LatLng> wayPoints, DirectionsProviderListener listener);
-
-
 }

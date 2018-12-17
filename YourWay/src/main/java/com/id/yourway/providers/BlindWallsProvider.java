@@ -1,7 +1,6 @@
 package com.id.yourway.providers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.entities.Sight;
@@ -21,10 +20,8 @@ import java.util.List;
 public class BlindWallsProvider implements SightProvider {
 
     private final RestProvider restProvider;
-    List<Sight> sights = new ArrayList<>();
-    InputStream is;
-    Context context;
-
+    private List<Sight> sights = new ArrayList<>();
+    private Context context;
 
     public BlindWallsProvider(Context context) {
         restProvider = RestProvider.getInstance(context);
@@ -37,7 +34,6 @@ public class BlindWallsProvider implements SightProvider {
                 new RestProviderListener() {
                     @Override
                     public void onRequestObjectAvailible(JSONObject response) {
-
                         try {
                             JSONArray array = response.getJSONArray("response");
 
@@ -64,8 +60,7 @@ public class BlindWallsProvider implements SightProvider {
                                 JSONArray imagesArray = wall.getJSONArray("images");
 
                                 List imageUrls = new ArrayList<String>();
-                                for (int j = 0; j < imagesArray.length(); j++)
-                                {
+                                for (int j = 0; j < imagesArray.length(); j++) {
                                     imageUrls.add("https://api.blindwalls.gallery/" +
                                             imagesArray.getJSONObject(j).getString("url"));
                                 }
@@ -91,12 +86,12 @@ public class BlindWallsProvider implements SightProvider {
                                 String descriptionNL = vvv.getString("description-nl");
                                 String descriptionEN = vvv.getString("description-en");
 
-                                List<String> imageUrls2 = new ArrayList<String>();
+                                List<String> imageUrls2 = new ArrayList<>();
                                 imageUrls2.add(String.valueOf(photoid));
 
-                                if(!name.equals(""))
-                                {
-                                    sights.add(new Sight(id, lat, lon, descriptionNL, descriptionEN, imageUrls2, name, "VVV"));
+                                if (!name.equals("")) {
+                                    sights.add(new Sight(id, lat, lon, descriptionNL,
+                                            descriptionEN, imageUrls2, name, "VVV"));
                                 }
                             }
 
@@ -114,10 +109,10 @@ public class BlindWallsProvider implements SightProvider {
                 }, false);
     }
 
-    public String loadJSONFromAsset() {
-        String json = null;
+    private String loadJSONFromAsset() {
+        String json;
         try {
-            is = context.getAssets().open("json/vvv.json");
+            InputStream is = context.getAssets().open("json/vvv.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
