@@ -1,6 +1,7 @@
 package com.id.yourway.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,14 +11,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Dash;
@@ -30,16 +28,12 @@ import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.id.yourway.activities.DetailActivity;
-import com.id.yourway.activities.MainActivity;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
 import com.id.yourway.entities.Sight;
-import com.id.yourway.providers.MovieCastDirectionsProvider;
-import com.id.yourway.providers.interfaces.DirectionsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -47,25 +41,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener,
+        GoogleMap.OnInfoWindowClickListener {
 
-public class MapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener, GoogleMap.OnInfoWindowClickListener {
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
     public static final List<PatternItem> PATTERN_POLYGON_ALPHA =
             Arrays.asList(new Gap(20), new Dash(20));
-    private static final int BOUND_PADDING = 100;
+
     private GoogleMap mMap;
     private List<Sight> sights;
     private Map<Marker, Sight> markerSightMap;
     private Queue<Runnable> runnables;
     private android.location.Location location;
-
     private Polyline track;
 
     public MapFragment() {
-        // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,14 +69,13 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         runnables = new LinkedBlockingQueue<>();
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnInfoWindowClickListener(this);
 
-        if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION))
-            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_PERMISSIONS_ID);
+        if (!checkPermission())
+            requestPermission();
         else
             mMap.setMyLocationEnabled(true);
 
@@ -94,7 +86,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 .build()));
         LatLngBounds bounds = new LatLngBounds.Builder()
                 .include(new LatLng(51.58651785207713, 4.708317190123125))
-                .include(new LatLng(51.61099091944258 , 4.770882942675826))
+                .include(new LatLng(51.61099091944258, 4.770882942675826))
                 .include(new LatLng(51.56619630165785, 4.864953377246138))
                 .include(new LatLng(51.53379788028693, 4.771831899595782))
                 .build();
@@ -108,7 +100,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setOnCameraMoveListener(this);
         mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-//        UiSettings settings = googleMap.getUiSettings();
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setTiltGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
@@ -121,32 +112,22 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.pattern(PATTERN_POLYGON_ALPHA);
         track = mMap.addPolyline(polyOptions);
 
-        Iterator<Runnable> iterator = runnables.iterator();
-        while (iterator.hasNext()) {
-            Runnable runnable = iterator.next();
+        for (Runnable runnable : runnables)
             runnable.run();
-        }
     }
 
     public void removeMarkers() {
-        for(Marker marker : markerSightMap.keySet()) {
+        for (Marker marker : markerSightMap.keySet())
             marker.remove();
-        }
     }
 
     public void addSight(final Sight sight) {
-        if(!sights.contains(sight)) {
+        if (!sights.contains(sight)) {
             sights.add(sight);
             if (mMap == null)
-                runnables.add(new Runnable() {
-                    @Override
-                    public void run() {
-                        addSightInternal(sight);
-                    }
-                });
-            else {
+                runnables.add(() -> addSightInternal(sight));
+            else
                 addSightInternal(sight);
-            }
 
             Log.i(TAG, "addSight: ");
         }
@@ -157,14 +138,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setInfoWindowAdapter(customInfoWindow);
         MarkerOptions options = null;
 
-        if(sight.getType().equals("VVV"))
-        {
+        if (sight.getType().equals("VVV")) {
             options = new MarkerOptions()
                     .position(sight.getLatLng())
                     .anchor(0.5f, 0.5f)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-        }else if(sight.getType().equals("Blindwall"))
-        {
+        } else if (sight.getType().equals("Blindwall")) {
             options = new MarkerOptions()
                     .position(sight.getLatLng())
                     .anchor(0.5f, 0.5f)
@@ -179,8 +158,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
 
-    public android.location.Location getGps() {
-        LocationManager locationManager = (LocationManager) MainActivity.getInstance().getSystemService(LOCATION_SERVICE);
+    public android.location.Location getGps(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         // getting GPS status
         boolean isGPSEnabled = false;
@@ -190,18 +169,20 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         if (isGPSEnabled) {
             if (location == null) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.getInstance(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.getInstance(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
                     return null;
                 }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this, null);
-                if (locationManager != null) {
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        Log.i(TAG, "getGps: latitude: " + latitude + " longitude: " + longitude);
-                        return location;
-                    }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        0, 0, this, null);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    Log.i(TAG, "getGps: latitude: " + latitude + " longitude: " + longitude);
+                    return location;
                 }
             }
         }
@@ -212,13 +193,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         return location;
     }
 
-    private boolean checkPermission(String permission) {
-        if (ActivityCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED)
-            return true;
-        return false;
+    private boolean checkPermission() {
+        return ActivityCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
-    private void requestPermission(String permission, int code) {
-        requestPermissions(new String[]{permission}, code);
+
+    private void requestPermission() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MapFragment.REQUEST_PERMISSIONS_ID);
     }
 
     public void drawPolyLineOnMap(List<LatLng> list) {
@@ -231,9 +213,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.addPolyline(polyOptions);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (LatLng latLng : list) {
+        for (LatLng latLng : list)
             builder.include(latLng);
-        }
     }
 
     public void drawPolyLineOnMap(LatLng latLng) {
@@ -247,33 +228,23 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
-    public void onCameraMove() {
-
-    }
+    public void onCameraMove() {}
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         return false;
     }
 

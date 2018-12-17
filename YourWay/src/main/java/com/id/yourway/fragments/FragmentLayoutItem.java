@@ -17,9 +17,7 @@ public class FragmentLayoutItem extends Fragment {
     public static final String IMAGE_RESOURCE_ID = "iconResourceID";
     public static final String ITEM_NAME = "itemName";
 
-    public FragmentLayoutItem() {
-
-    }
+    public FragmentLayoutItem() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,8 +26,8 @@ public class FragmentLayoutItem extends Fragment {
         View view = inflater.inflate(R.layout.fragment_layout_item, container,
                 false);
 
-        ivIcon = (ImageView) view.findViewById(R.id.frag1_icon);
-        tvItemName = (TextView) view.findViewById(R.id.frag1_text);
+        ivIcon = view.findViewById(R.id.frag1_icon);
+        tvItemName = view.findViewById(R.id.frag1_text);
 
         tvItemName.setText(getArguments().getString(ITEM_NAME));
         ivIcon.setImageDrawable(view.getResources().getDrawable(

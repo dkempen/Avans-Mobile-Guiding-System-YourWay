@@ -73,7 +73,7 @@ public class DetailActivity extends AppCompatActivity {
         String[] stringArray = (String[]) list.toArray(new String[list.size()]);
 
         ViewPager viewPager = findViewById(R.id.detailledviewPagerID);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this, stringArray);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, stringArray, sight.getType());
         viewPager.setAdapter(adapter);
     }
 }

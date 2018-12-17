@@ -12,10 +12,12 @@ import com.squareup.picasso.Picasso;
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private String[] imageUrls;
+    private String type;
 
-    public ViewPagerAdapter(Context context, String[] imageUrls) {
+    public ViewPagerAdapter(Context context, String[] imageUrls, String type) {
         this.context = context;
         this.imageUrls = imageUrls;
+        this.type = type;
     }
 
     @Override
@@ -32,13 +34,22 @@ public class ViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
-        Picasso.get()
-                .load(imageUrls[position])
-                .fit()
-                .centerCrop()
-                .into(imageView);
-        container.addView(imageView);
 
+        if(type.equals("Blindwall"))
+        {
+            Picasso.get()
+                    .load(imageUrls[position])
+                    .fit()
+                    .centerCrop()
+                    .into(imageView);
+            container.addView(imageView);
+        } else if(type.equals("VVV"))
+        {
+            String imageUrl = "" + imageUrls[position];
+            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
+            imageView.setImageResource(resid);
+            container.addView(imageView);
+        }
         return imageView;
     }
 

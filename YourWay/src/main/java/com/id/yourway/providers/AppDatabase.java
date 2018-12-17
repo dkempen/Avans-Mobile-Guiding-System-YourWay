@@ -6,14 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AppDatabase extends SQLiteOpenHelper {
 
-
     private static final String NAME= "appDatabase";
     private static final int VERSION = 1;
 
-
     public AppDatabase(Context context) {
         super(context, NAME, null, VERSION);
-
     }
 
     @Override
@@ -21,7 +18,6 @@ public class AppDatabase extends SQLiteOpenHelper {
         //TODO add reflection for finding tables
         db.execSQL(RouteDAO.fetchTableSignature());
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -17,14 +17,13 @@ class RestProvider {
     private static RestProvider Instance = null;
     private RequestQueue requestqueue;
 
-    RestProvider(Context context) {
+    private RestProvider(Context context) {
         requestqueue = Volley.newRequestQueue(context);
     }
 
     static RestProvider getInstance(Context context) {
-        if (Instance == null) {
+        if (Instance == null)
             Instance = new RestProvider(context);
-        }
         return Instance;
     }
 
@@ -44,7 +43,6 @@ class RestProvider {
                         try {
                             JSONObject object = new JSONObject();
                             object.put("response", response);
-                            long id = Thread.currentThread().getId();
                             listener.onRequestObjectAvailible(object);
                         } catch (JSONException e) {
                             e.printStackTrace();
