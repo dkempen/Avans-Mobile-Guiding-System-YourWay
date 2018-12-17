@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -139,10 +140,21 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private void addSightInternal(Sight sight) {
         CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(getContext());
         mMap.setInfoWindowAdapter(customInfoWindow);
+        MarkerOptions options = null;
 
-        MarkerOptions options = new MarkerOptions()
-                .position(sight.getLatLng())
-                .anchor(0.5f, 0.5f);
+        if(sight.getType().equals("VVV"))
+        {
+            options = new MarkerOptions()
+                    .position(sight.getLatLng())
+                    .anchor(0.5f, 0.5f)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        }else if(sight.getType().equals("Blindwall"))
+        {
+            options = new MarkerOptions()
+                    .position(sight.getLatLng())
+                    .anchor(0.5f, 0.5f)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
 
         Marker marker = mMap.addMarker(options);
         marker.setTag(sight);
