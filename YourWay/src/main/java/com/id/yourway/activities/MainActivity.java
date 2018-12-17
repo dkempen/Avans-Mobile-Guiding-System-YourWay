@@ -1,35 +1,27 @@
 package com.id.yourway.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.DrawerItem;
 import com.id.yourway.R;
-import com.id.yourway.adapters.CustomDrawerAdapter;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
 import com.id.yourway.fragments.MapFragment;
+import com.id.yourway.fragments.SightListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,21 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-    CustomDrawerAdapter adapter;
-
     private MapFragment mapFragment;
     private HelpFragment helpFragment;
+    private SightListFragment sightListFragment;
 
     List<DrawerItem> dataList;
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
-    private List<LatLng> latlng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         instance = this;
         fragmentManager = getSupportFragmentManager();
         mapFragment = new MapFragment();
-
+        sightListFragment = new SightListFragment();
+        helpFragment = new HelpFragment();
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -96,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case  R.id.sight_item :
-                        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
-                        startActivity(intent);
+                        fragmentManager.beginTransaction().replace(R.id.fragment,
+                                sightListFragment).addToBackStack(null).commitAllowingStateLoss();
                         break;
                     case  R.id.settings_item :
                         Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
@@ -132,17 +117,10 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setVisibility(View.INVISIBLE);
 
         setSupportActionBar(mToolbar);
-        // Hide the title
-        getSupportActionBar().setTitle("Map");
 
         ImageButton settingsButton = findViewById(R.id.toolBarSettingsButton);
         settingsButton.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class)));
-
-        ImageButton hamburgerButton = findViewById(R.id.toolBarHamburgerButton);
-        hamburgerButton.setOnClickListener(v -> {
-                    drawerLayout.openDrawer(GravityCompat.START);
-        });
 
         ImageButton helpButton = findViewById(R.id.toolBarHelpButton);
         helpButton.setOnClickListener(v -> {
@@ -151,6 +129,13 @@ public class MainActivity extends AppCompatActivity {
             HelpFragment helpFragment = new HelpFragment();
             helpFragment.show(ft, "HELP");
         });
+
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setTitle("Map");
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
     }
 
     public void updateSights() {
@@ -173,9 +158,14 @@ public class MainActivity extends AppCompatActivity {
         return sights;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
 
+        return super.onOptionsItemSelected(menuItem);
+    }
 }
