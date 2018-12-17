@@ -96,4 +96,7 @@
     <string name="year">Year: </string>
     <string name="author">Author: </string>
     <string name="photographer">Photographer: </string>
+    <string name="mapFragmentTitle">Map</string>
+    <string name="routesFragmentTitle">Routes</string>
+    <string name="sightFragmentTitle">Sights</string>
 </resources>

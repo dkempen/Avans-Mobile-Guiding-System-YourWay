@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.R;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
+    private TextView toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.bringToFront();
         ImageButton searchButton = findViewById(R.id.toolBarSearchButton);
         searchButton.setVisibility(View.INVISIBLE);
+        toolbarTitle = findViewById(R.id.toolBarTextView);
 
         setSupportActionBar(mToolbar);
 
@@ -172,6 +175,12 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Sight> getSights() {
         return sights;
+    }
+
+    public void setToolbarTitle(String title) {
+        if (toolbarTitle == null)
+            return;
+        toolbarTitle.setText(title);
     }
 
     @Override

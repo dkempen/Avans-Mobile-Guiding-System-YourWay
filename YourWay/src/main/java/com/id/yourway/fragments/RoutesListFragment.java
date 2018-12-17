@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.id.yourway.R;
+import com.id.yourway.activities.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +60,13 @@ public class RoutesListFragment extends Fragment implements IDetailFragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setToolbarTitle(getString(R.string.routesFragmentTitle));
     }
 
     @Override
