@@ -23,16 +23,12 @@ public class BlindWallsProvider implements SightProvider {
     private final RestProvider restProvider;
     List<Sight> sights = new ArrayList<>();
     InputStream is;
+    Context context;
 
 
     public BlindWallsProvider(Context context) {
         restProvider = RestProvider.getInstance(context);
-        try {
-            is = context.getAssets().open("json/vvv.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.context = context;
     }
 
     @Override
@@ -121,6 +117,7 @@ public class BlindWallsProvider implements SightProvider {
     public String loadJSONFromAsset() {
         String json = null;
         try {
+            is = context.getAssets().open("json/vvv.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
