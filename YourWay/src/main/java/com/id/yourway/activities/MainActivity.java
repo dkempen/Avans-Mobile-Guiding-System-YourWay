@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.R;
+import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
 import com.id.yourway.fragments.IDetailFragment;
@@ -34,6 +35,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private Route route;
     private static final String TAG = MapFragment.class.getSimpleName();
 
     private Map<String, Sight> sightMap = new HashMap<>();
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
 
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -129,6 +133,15 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: ", e);
             AppContext.getInstance(this).getFeedbackManager().onGPSLost(this);
         }
+    }
+
+
+    public void setRouteAndSwitchToHome(Route route){
+        fragmentManager.beginTransaction().replace(R.id.fragment,
+                mapFragment).addToBackStack(null).commitAllowingStateLoss();
+        this.route = route;
+        Log.e("hello", "hello");
+
     }
 
     private void setupToolbar() {

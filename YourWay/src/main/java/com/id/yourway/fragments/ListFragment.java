@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.android.volley.VolleyError;
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
+import com.id.yourway.activities.MainActivity;
 import com.id.yourway.adapters.RouteListAdapter;
 import com.id.yourway.adapters.SightListAdapter;
 import com.id.yourway.entities.Route;
@@ -94,7 +95,7 @@ public class ListFragment extends Fragment implements IDetailFragment {
     public void createAndBindAdapterForRoutes(View view, List<Route> routes){
         mRecyclerView = view.findViewById(R.id.list_recyclerview_id);
         mRecyclerView.setHasFixedSize(true);
-        RouteListAdapter adapter = new RouteListAdapter(getContext(), routes);
+        RouteListAdapter adapter = new RouteListAdapter(getContext(), routes, (MainActivity)getActivity());
         mRecyclerView.setAdapter(adapter);
 
 
