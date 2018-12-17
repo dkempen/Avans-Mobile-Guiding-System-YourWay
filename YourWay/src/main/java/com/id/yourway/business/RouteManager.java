@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.business.listeners.DirectionsListener;
+import com.id.yourway.entities.Route;
 import com.id.yourway.providers.MovieCastDirectionsProvider;
 import com.id.yourway.providers.MovieCastDirectionsProviderV2;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
@@ -16,7 +17,7 @@ public class RouteManager {
 
     private DatabaseManager databaseManager;
     private DirectionsProvider directionsProvider;
-    private List<String> routes;
+    private List<Route> routes;
 
     public RouteManager(Context context){
         databaseManager = new DatabaseManager(context);
@@ -27,7 +28,7 @@ public class RouteManager {
         routes.add("VVV route");
     }
 
-    public List<String> getRoutes(){
+    public List<Routes> getRoutes(){
         return routes;
     }
 
