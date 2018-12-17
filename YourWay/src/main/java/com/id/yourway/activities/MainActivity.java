@@ -1,6 +1,7 @@
 package com.id.yourway.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -51,8 +52,25 @@ public class MainActivity extends AppCompatActivity {
         mapFragment = new MapFragment();
         sightListFragment = new SightListFragment();
         helpFragment = new HelpFragment();
-
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean firstStart = preferences.getBoolean("firstStart", true);
+
+        if(firstStart)
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            HelpFragment helpFragment = new HelpFragment();
+            helpFragment.show(ft, "HELP");
+
+            SharedPreferences preferences1 = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences1.edit();
+            editor.putBoolean("firstStart", false);
+            editor.apply();
+        }
+
+
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(item -> {

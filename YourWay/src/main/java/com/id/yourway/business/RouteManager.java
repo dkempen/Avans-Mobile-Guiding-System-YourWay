@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.id.yourway.business.listeners.DirectionsListener;
-import com.id.yourway.providers.MovieCastDirectionsProvider;
 import com.id.yourway.providers.MovieCastDirectionsProviderV2;
 import com.id.yourway.providers.interfaces.DirectionsProvider;
 import com.id.yourway.providers.listeners.DirectionsProviderListener;
