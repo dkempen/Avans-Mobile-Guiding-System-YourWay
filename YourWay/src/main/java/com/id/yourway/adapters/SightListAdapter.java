@@ -45,8 +45,16 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
         else
             viewHolder.title.setText(sight.getAuthor().replaceAll("\\r\\n|\\r|\\n", " "));
 
+        if(sight.getType().equals("Blindwall"))
+        {
+            tryImages(0, sight, viewHolder);
 
-        tryImages(0, sight, viewHolder);
+        } else if(sight.getType().equals("VVV"))
+        {
+            String imageUrl = "" + sight.getImages().get(0);
+            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
+            viewHolder.thumbnail.setImageResource(resid);
+        }
     }
 
     @NonNull
@@ -86,9 +94,6 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
                     tryImages(finalIndex, sight, holder);
                 }
             });
-        }
-        else{
-            context.getResources().getIdentifier("YourWay:drawable/" + sight.getImages().get(0), null, null);
         }
     }
 
