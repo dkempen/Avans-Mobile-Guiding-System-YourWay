@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             raListener.RouteReady(route);
         }
         //this.route = route;
-        //mapFragment.setRoute(route);
+        mapFragment.setRoute(route);
         Log.e("hello", "hello");
     }
 

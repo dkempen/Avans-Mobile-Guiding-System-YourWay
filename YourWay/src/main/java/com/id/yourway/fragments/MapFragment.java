@@ -33,9 +33,8 @@ import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.activities.listeners.RouteReadyListener;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
-import com.id.yourway.business.listeners.DirectionsListener;
-import com.id.yourway.entities.Route;
 import com.id.yourway.business.RouteManager;
+import com.id.yourway.business.listeners.DirectionsListener;
 import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
 
@@ -184,6 +183,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         RouteManager routeManager = AppContext.getInstance(getContext()).getRouteManager();
         currentRouteIndex = routeManager.getRouteProgression(route.getName());
         nextSight = getMapEntry(route.getSight(currentRouteIndex));
+        nextSight.getKey().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
     }
 
     public Map.Entry<Marker, Sight> getMapEntry(Sight sight) {
@@ -241,7 +241,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.width(5);
         polyOptions.addAll(list);
 
-        mMap.clear();
+//        mMap.clear();
         mMap.addPolyline(polyOptions);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -294,6 +294,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
 
         nextSight = getMapEntry(route.getSight(currentRouteIndex));
+        nextSight.getKey().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
     }
 
     private void routeIsFinished() {
