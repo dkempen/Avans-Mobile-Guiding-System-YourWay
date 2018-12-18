@@ -85,7 +85,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onStart() {
         super.onStart();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setToolbarTitle(getString(R.string.mapFragmentTitle));
+        mainActivity.setToolbarTitle("Your Way");
     }
 
     @Override
@@ -154,7 +154,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
     }
 
-    private void addSightInternal(Sight sight) {
+    public void addSightInternal(Sight sight) {
         CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(getContext());
         mMap.setInfoWindowAdapter(customInfoWindow);
         MarkerOptions options = null;
@@ -184,6 +184,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         currentRouteIndex = routeManager.getRouteProgression(route.getName());
         nextSight = getMapEntry(route.getSight(currentRouteIndex));
         nextSight.getKey().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+    }
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public void deleteRoute(){
+        this.route = null;
     }
 
     public Map.Entry<Marker, Sight> getMapEntry(Sight sight) {

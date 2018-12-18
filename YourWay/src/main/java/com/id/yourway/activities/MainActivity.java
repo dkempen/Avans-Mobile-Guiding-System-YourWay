@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private HelpFragment helpFragment;
     private ListFragment listFragment;
 
+    private Toolbar mToolbar;
+    private ActionBar actionbar;
+
     private android.support.v4.app.FragmentManager fragmentManager;
     private List<Sight> sights;
     private TextView toolbarTitle;
@@ -142,12 +145,20 @@ public class MainActivity extends AppCompatActivity {
             raListener.RouteReady(route);
         }
         //this.route = route;
+        mapFragment.removeMarkers();
+        if(mapFragment.getRoute() != null){
+            mapFragment.deleteRoute();
+        }
+        List<Sight> sights = route.getSights();
+        for (Sight sight : sights) {
+            mapFragment.addSightInternal(sight);
+        }
         mapFragment.setRoute(route);
         Log.e("hello", "hello");
     }
 
     private void setupToolbar() {
-        Toolbar mToolbar = findViewById(R.id.tool_bar);
+        mToolbar = findViewById(R.id.tool_bar);
         mToolbar.bringToFront();
         ImageButton searchButton = findViewById(R.id.toolBarSearchButton);
         searchButton.setVisibility(View.INVISIBLE);
@@ -167,10 +178,10 @@ public class MainActivity extends AppCompatActivity {
             helpFragment.show(ft, "HELP");
         });
 
-        ActionBar actionbar = getSupportActionBar();
+        actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setTitle("Map");
+            actionbar.setTitle("Your Way");
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
     }
