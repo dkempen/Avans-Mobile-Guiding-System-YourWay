@@ -27,7 +27,7 @@
     <string name="Sight">Bezienswaardigheid</string>
     <string name="Settings">Instellingen</string>
     <string name="Help">Help</string>
-    <string name="year">Jaartal:</string>
-    <string name="author">Maker:</string>
+    <string name="year">Jaar:</string>
+    <string name="author">Auteur:</string>
     <string name="photographer">Fotograaf:</string>
 </resources>
