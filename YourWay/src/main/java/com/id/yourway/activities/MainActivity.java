@@ -135,13 +135,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void setRouteAndSwitchToHome(Route route){
         fragmentManager.beginTransaction().replace(R.id.fragment,
                 mapFragment).addToBackStack(null).commitAllowingStateLoss();
         this.route = route;
+        mapFragment.setRoute(route);
         Log.e("hello", "hello");
-
     }
 
     private void setupToolbar() {

@@ -32,6 +32,8 @@ import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
+import com.id.yourway.business.RouteManager;
+import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
 
 import java.util.ArrayList;
@@ -59,6 +61,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Queue<Runnable> runnables;
     private android.location.Location location;
     private Polyline track;
+
+    private Route route;
+    private int currentRouteIndex;
+    private Map.Entry<Marker, Sight> nextSight;
+    private static final int SIGHT_TRIGGER_RADIUS = 20;
 
     public MapFragment() {
     }
@@ -167,6 +174,19 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         markerSightMap.put(marker, sight);
     }
 
+    public void setRoute(Route route) {
+        this.route = route;
+        RouteManager routeManager = AppContext.getInstance(getContext()).getRouteManager();
+        currentRouteIndex = routeManager.getRouteProgression(route.getName());
+        nextSight = getMapEntry(route.getSight(currentRouteIndex));
+    }
+
+    public Map.Entry<Marker, Sight> getMapEntry(Sight sight) {
+        for (Map.Entry<Marker, Sight> entry : markerSightMap.entrySet())
+            if (entry.getValue().equals(sight))
+                return entry;
+        return null;
+    }
 
     public android.location.Location getGps(Context context) {
         LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
@@ -198,10 +218,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
 //        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
         return null;
-    }
-
-    public Location getLocation() {
-        return location;
     }
 
     private boolean checkPermission() {
@@ -240,22 +256,65 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onLocationChanged(Location location) {
         this.location = location;
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
+        checkForNearSight(location);
+    }
+
+    private void checkForNearSight(Location location) {
+        if (nextSight == null)
+            return;
+
+        Marker marker = nextSight.getKey();
+        float[] results = new float[1];
+        Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                marker.getPosition().latitude, marker.getPosition().longitude, results);
+        int metersToSight = (int) results[0];
+        if (metersToSight > SIGHT_TRIGGER_RADIUS)
+            return;
+
+        // Sight is discovered
+        onSightDiscovered(marker);
+    }
+
+    private void onSightDiscovered(Marker marker) {
+        marker.showInfoWindow();
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        AppContext.getInstance(getContext()).getRouteManager().
+                storeRouteProgression(route.getName(), currentRouteIndex);
+
+        currentRouteIndex++;
+        if (route.getSights().size() == currentRouteIndex) {
+            routeIsFinished();
+            return;
+        }
+
+        nextSight = getMapEntry(route.getSight(currentRouteIndex));
+    }
+
+    private void routeIsFinished() {
+        route = null;
+        nextSight = null;
+        currentRouteIndex = 0;
+
+        AppContext.getInstance(getContext()).getFeedbackManager().onRouteFinished(getContext());
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+    }
 
     @Override
     public void onProviderDisabled(String provider) {
         AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
-
     }
 
     @Override
-    public void onCameraMove() {}
+    public void onCameraMove() {
+    }
 
     @Override
     public boolean onMarkerClick(Marker marker) {

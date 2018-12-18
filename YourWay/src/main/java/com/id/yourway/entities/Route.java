@@ -20,6 +20,10 @@ public class Route {
         return sights;
     }
 
+    public Sight getSight(int index) {
+        return sights.get(index);
+    }
+
     public void setProgress(int progress) {
         this.progress = progress;
     }
