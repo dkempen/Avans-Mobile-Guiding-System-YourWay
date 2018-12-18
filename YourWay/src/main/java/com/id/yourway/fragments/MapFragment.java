@@ -31,7 +31,10 @@ import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
+import com.id.yourway.activities.listeners.RouteReadyListener;
 import com.id.yourway.adapters.CustomInfoWindowAdapter;
+import com.id.yourway.business.listeners.DirectionsListener;
+import com.id.yourway.entities.Route;
 import com.id.yourway.business.RouteManager;
 import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
@@ -48,7 +51,7 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener,
-        GoogleMap.OnInfoWindowClickListener {
+        GoogleMap.OnInfoWindowClickListener, RouteReadyListener {
 
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
@@ -131,6 +134,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         for (Runnable runnable : runnables)
             runnable.run();
+        MainActivity mainActivity = (MainActivity)getActivity();
+        mainActivity.setRouteReadyListener(this);
     }
 
     public void removeMarkers() {
@@ -327,5 +332,20 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra("SIGHT_OBJECT", sight);
         startActivity(intent);
+    }
+
+    @Override
+    public void RouteReady(Route route) {
+        AppContext.getInstance(getContext()).getRouteManager().getDirections(route, new DirectionsListener() {
+            @Override
+            public void onReceivedDirections(List<LatLng> directionList) {
+                drawPolyLineOnMap(directionList);
+            }
+
+            @Override
+            public void onError(Error error) {
+                Log.e("oh no ", "oh no");
+            }
+        });
     }
 }

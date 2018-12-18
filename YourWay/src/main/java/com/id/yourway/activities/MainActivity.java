@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.id.yourway.R;
+import com.id.yourway.activities.listeners.RouteReadyListener;
 import com.id.yourway.entities.Route;
 import com.id.yourway.entities.Sight;
 import com.id.yourway.fragments.HelpFragment;
@@ -33,7 +34,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Route route;
+
+    private RouteReadyListener raListener;
     private static final String TAG = MapFragment.class.getSimpleName();
 
     private Map<String, Sight> sightMap = new HashMap<>();
@@ -128,11 +130,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setRouteAndSwitchToHome(Route route) {
+    public void setRouteReadyListener(RouteReadyListener raListener){
+        this.raListener = raListener;
+    }
+
+
+    public void setRouteAndSwitchToHome(Route route){
         fragmentManager.beginTransaction().replace(R.id.fragment,
                 mapFragment).addToBackStack(null).commitAllowingStateLoss();
-        this.route = route;
-        mapFragment.setRoute(route);
+        if(raListener != null){
+            raListener.RouteReady(route);
+        }
+        //this.route = route;
+        //mapFragment.setRoute(route);
         Log.e("hello", "hello");
     }
 
