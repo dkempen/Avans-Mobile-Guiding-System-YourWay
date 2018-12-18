@@ -59,6 +59,14 @@ public class RouteDAO {
     }
 
     public int getProgession(String routeName) {
+        if (!progressionRecordExists(database.getWritableDatabase(), routeName)) {
+            ContentValues tableValues = new ContentValues();
+            tableValues.put(ROUTE_ID, routeName);
+            tableValues.put(ROUTE_PROGRESSION, 0);
+            database.getWritableDatabase().insertOrThrow(TABLE_NAME, null, tableValues);
+            return 0;
+        }
+
         String selector = ROUTE_ID + " = ?";
         String[] colArgs = {ROUTE_PROGRESSION};
         String[] selectorArgs = {routeName};
