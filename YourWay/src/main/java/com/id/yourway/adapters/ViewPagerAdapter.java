@@ -35,18 +35,17 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ImageView imageView = new ImageView(context);
 
-        if(type.equals("Blindwall"))
-        {
+        if (type.equals("Blindwall")) {
             Picasso.get()
                     .load(imageUrls[position])
                     .fit()
                     .centerCrop()
                     .into(imageView);
             container.addView(imageView);
-        } else if(type.equals("VVV"))
-        {
+        } else if (type.equals("VVV")) {
             String imageUrl = "" + imageUrls[position];
-            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
+            int resid = context.getResources().getIdentifier(context.getPackageName()
+                    + ":drawable/p" + imageUrl, null, null);
             imageView.setImageResource(resid);
             container.addView(imageView);
         }

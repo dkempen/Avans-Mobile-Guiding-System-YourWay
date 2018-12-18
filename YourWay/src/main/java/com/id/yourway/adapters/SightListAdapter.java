@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,10 +21,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.SightViewHolder>{
+public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.SightViewHolder> {
     private final static String TAG = SightListAdapter.class.getSimpleName();
-
-    //private LR
 
     private List<Sight> sights;
     private Context context;
@@ -44,26 +40,23 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
     @Override
     public void onBindViewHolder(@NonNull final SightViewHolder viewHolder, int position) {
         Sight sight = sights.get(position);
-        if(viewHolder.thumbnail != null) {
+        if (viewHolder.thumbnail != null)
             viewHolder.thumbnail.setImageDrawable(null);
-        }
 
-        if(sight.getTitle() != null)
-            viewHolder.title.setText(sight.getTitle().replaceAll("\\r\\n|\\r|\\n", " "));
+        if (sight.getTitle() != null)
+            viewHolder.title.setText(sight.getTitle().
+                    replaceAll("\\r\\n|\\r|\\n", " "));
         else
-            viewHolder.title.setText(sight.getAuthor().replaceAll("\\r\\n|\\r|\\n", " "));
+            viewHolder.title.setText(sight.getAuthor().
+                    replaceAll("\\r\\n|\\r|\\n", " "));
 
 
-
-        if(sight.getType().equals("Blindwall"))
-        {
+        if (sight.getType().equals("Blindwall")) {
             tryImages(0, sight, viewHolder);
-
-        } else if(sight.getType().equals("VVV"))
-        {
-
+        } else if (sight.getType().equals("VVV")) {
             String imageUrl = "" + sight.getImages().get(0);
-            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
+            int resid = context.getResources().getIdentifier(context.getPackageName()
+                    + ":drawable/p" + imageUrl, null, null);
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeResource(context.getResources(), resid, options);
@@ -73,12 +66,12 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
 
             // Decode bitmap with inSampleSize set
             options.inJustDecodeBounds = false;
-            Bitmap bmp =  BitmapFactory.decodeResource(context.getResources(), resid, options);
+            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resid, options);
             viewHolder.thumbnail.setImageBitmap(bmp);
         }
     }
 
-    public static int calculateInSampleSize(
+    private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -86,7 +79,6 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
-
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
 
@@ -97,24 +89,21 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
                 inSampleSize *= 2;
             }
         }
-
         return inSampleSize;
     }
 
     @NonNull
     @Override
     public SightViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_sight, parent, false);
-
         return new SightViewHolder(v, context);
     }
 
     private void tryImages(int index, Sight sight, SightViewHolder holder) {
         String url = null;
 
-        if(sight.getType().equals("Blindwall")) {
+        if (sight.getType().equals("Blindwall")) {
             try {
                 url = sight.getImages().get(index);
                 //Log.d(TAG, "https://api.blindwalls.gallery/" + sight.getImages().get(index));
@@ -139,17 +128,14 @@ public class SightListAdapter extends RecyclerView.Adapter<SightListAdapter.Sigh
                 }
             });
         }
-        else{
-
-        }
     }
 
-    public class SightViewHolder extends RecyclerView.ViewHolder {
+    class SightViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
         ImageView thumbnail;
 
-        public SightViewHolder(View itemView, final Context ctx) {
+        SightViewHolder(View itemView, final Context ctx) {
             super(itemView);
 
             title = itemView.findViewById(R.id.item_sight_name_id);

@@ -1,28 +1,19 @@
 package com.id.yourway.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.id.yourway.R;
 import com.id.yourway.adapters.ViewPagerAdapter;
 import com.id.yourway.entities.Sight;
-import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -38,7 +29,6 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-
         muralTitle = findViewById(R.id.toolbar_detail);
         muralAuthorName = findViewById(R.id.detailedActivity_author);
         muralPhotographer = findViewById(R.id.detailedActivity_photographer);
@@ -48,8 +38,6 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         sight = (Sight) intent.getSerializableExtra("SIGHT_OBJECT");
-        //setTitle(sight.getAuthor());
-        //muralDescription.setMovementMethod(new ScrollingMovementMethod());
         muralDescription.setText(sight.getDescription());
         muralAuthorName.setText(sight.getAuthor());
         muralPhotographer.setText(sight.getPhotographer());
@@ -70,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         muralYear.setText(String.valueOf(formatted));
 
         List<String> list = sight.getImages();
-        String[] stringArray = (String[]) list.toArray(new String[list.size()]);
+        String[] stringArray = list.toArray(new String[0]);
 
         ViewPager viewPager = findViewById(R.id.detailledviewPagerID);
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, stringArray, sight.getType());

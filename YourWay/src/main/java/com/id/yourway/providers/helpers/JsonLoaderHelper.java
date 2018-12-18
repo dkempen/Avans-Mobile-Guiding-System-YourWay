@@ -15,7 +15,7 @@ public class JsonLoaderHelper {
 
     public static JSONObject loadJsonFile(Context context, String jsonFile){
         InputStream is;
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
             is = context.getAssets().open(jsonFile);
             int size = is.available();
@@ -31,12 +31,8 @@ public class JsonLoaderHelper {
                  jsonObject = new JSONObject(json);
             }
         }
-        catch(JSONException e){
+        catch(JSONException | IOException e){
             e.printStackTrace();
-            return null;
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
             return null;
         }
         return jsonObject;

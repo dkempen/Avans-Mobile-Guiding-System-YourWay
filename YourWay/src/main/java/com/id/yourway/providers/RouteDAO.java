@@ -44,7 +44,6 @@ public class RouteDAO {
             tableValues.put(ROUTE_PROGRESSION, poiNumber);
             writableDatabase.insertOrThrow(TABLE_NAME, null, tableValues);
         }
-
         database.close();
     }
 

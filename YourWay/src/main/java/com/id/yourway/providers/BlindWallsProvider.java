@@ -13,8 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +81,7 @@ public class BlindWallsProvider implements SightProvider {
                                 double lat = vvv.getDouble("lat");
                                 double lon = vvv.getDouble("long");
                                 String name = vvv.getString("name");
-                                String note = vvv.getString("note");
+//                                String note = vvv.getString("note");
                                 int photoid = vvv.getInt("photoid");
                                 String descriptionNL = vvv.getString("description-nl");
                                 String descriptionEN = vvv.getString("description-en");
@@ -110,5 +108,4 @@ public class BlindWallsProvider implements SightProvider {
                     }
                 }, false);
     }
-
 }

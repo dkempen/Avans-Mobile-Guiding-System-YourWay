@@ -27,17 +27,17 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
     @NonNull
     @Override
     public RouteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        Route  currentRoute = routes.get(i);
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_route,parent, false);
+        Route currentRoute = routes.get(i);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_route, parent, false);
         return new RouteViewHolder(view, activity);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RouteViewHolder routeViewHolder, int i) {
-        Route  currentRoute = routes.get(i);
+        Route currentRoute = routes.get(i);
         routeViewHolder.nameTextView.setText(currentRoute.getName());
-        routeViewHolder.lengthKmTextView.setText(Double.toString(currentRoute.getLengthInKm())+" km");
-        routeViewHolder.numberOfPOIS.setText(Integer.toString(currentRoute.getSights().size())+" POI's");
+        routeViewHolder.lengthKmTextView.setText(Double.toString(currentRoute.getLengthInKm()) + " km");
+        routeViewHolder.numberOfPOIS.setText(Integer.toString(currentRoute.getSights().size()) + " POI's");
     }
 
 
@@ -46,12 +46,10 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
         return routes.size();
     }
 
-    public class RouteViewHolder extends RecyclerView.ViewHolder {
+    class RouteViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, lengthKmTextView, numberOfPOIS;
 
-
-
-        public RouteViewHolder(@NonNull View itemView, MainActivity activity) {
+        RouteViewHolder(@NonNull View itemView, MainActivity activity) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.item_route_name);
             lengthKmTextView = itemView.findViewById(R.id.item_route_length_km);

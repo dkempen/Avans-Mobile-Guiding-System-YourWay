@@ -9,21 +9,21 @@ import com.id.yourway.providers.RouteDAO;
 
 import java.util.List;
 
-public class DatabaseManager {
+class DatabaseManager {
 
     private AppDatabase database;
     private RouteDAO routeDAO;
-    public DatabaseManager(Context context) {
+
+    DatabaseManager(Context context) {
         database = new AppDatabase(context);
         routeDAO = new RouteDAO(database);
     }
 
-    public void storeRouteProgression(String routeName, int progression){
+    void storeRouteProgression(String routeName, int progression){
         routeDAO.storeProgression(routeName, progression);
     }
 
-    public int getRouteProgression(String routeName){
+    int getRouteProgression(String routeName){
         return routeDAO.getProgession(routeName);
     }
-
 }

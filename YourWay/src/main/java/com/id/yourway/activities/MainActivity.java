@@ -25,16 +25,13 @@ import com.id.yourway.fragments.HelpFragment;
 import com.id.yourway.fragments.IDetailFragment;
 import com.id.yourway.fragments.ListFragment;
 import com.id.yourway.fragments.MapFragment;
-import com.id.yourway.fragments.SightListFragment;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private Route route;
     private static final String TAG = MapFragment.class.getSimpleName();
@@ -66,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         boolean firstStart = preferences.getBoolean("firstStart", true);
 
-        if(firstStart)
-        {
+        if (firstStart) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             HelpFragment helpFragment = new HelpFragment();
@@ -78,9 +74,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("firstStart", false);
         }
 
-
         NavigationView navigationView = findViewById(R.id.nav_view);
-
 
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -88,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     fragmentManager.beginTransaction().replace(R.id.fragment,
                             mapFragment).addToBackStack(null).commitAllowingStateLoss();
                     break;
-                case  R.id.routes_item: {
+                case R.id.routes_item: {
                     listFragment = new ListFragment();
                     Bundle args = new Bundle();
                     args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_ROUTES);
@@ -98,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
-                case  R.id.sight_item :
-                {
+                case R.id.sight_item: {
                     listFragment = new ListFragment();
                     Bundle args = new Bundle();
                     args.putInt(IDetailFragment.FRAGMENT_TYPE, IDetailFragment.FRAG_LIST_SIGHT);
@@ -135,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setRouteAndSwitchToHome(Route route){
+    public void setRouteAndSwitchToHome(Route route) {
         fragmentManager.beginTransaction().replace(R.id.fragment,
                 mapFragment).addToBackStack(null).commitAllowingStateLoss();
         this.route = route;

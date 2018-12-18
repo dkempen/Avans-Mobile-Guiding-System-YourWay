@@ -28,61 +28,57 @@ public class RouteManager {
     private DirectionsProvider directionsProvider;
     private JSONObject jsonRoutes;
 
-    public RouteManager(Context context, SightManager sightManager){
+    public RouteManager(Context context, SightManager sightManager) {
         databaseManager = new DatabaseManager(context);
         this.sightManager = sightManager;
         jsonRoutes = JsonLoaderHelper.loadJsonFile(context, "json/BlindWallsRoutes.json");
         directionsProvider = new MovieCastDirectionsProviderV2(context);
     }
 
-    public void getRoutes(RoutesListener listener){
+    public void getRoutes(RoutesListener listener) {
         List<Route> routes = new ArrayList<>();
 
         sightManager.getSights(new SightProviderListener() {
             @Override
             public void onSightsAvailable(List<Sight> sights) {
                 try {
-
-                    List<Sight>  vvvRouteList = sights.subList(sights.size()-JsonLoaderHelper.VVV_ITEM_SIZE-1, sights.size()-1);
+                    List<Sight> vvvRouteList = sights.subList(sights.size()
+                            - JsonLoaderHelper.VVV_ITEM_SIZE - 1, sights.size() - 1);
                     Route vvvRoute = new Route("kut vvv route", 1000, vvvRouteList);
                     routes.add(vvvRoute);
 
-                    List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
-
+//                    List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
                     JSONArray routeJsonArray = jsonRoutes.getJSONArray("response");
                     for (int i = 0; i < routeJsonArray.length(); i++) {
                         List<Sight> subSights = new ArrayList<>();
                         JSONObject routeObject = routeJsonArray.getJSONObject(i);
                         JSONArray sightArray = routeObject.getJSONArray("sights");
-                        for(int j = 0; j<sightArray.length(); j++){
-                            subSights.add(getSightById(sights,sightArray.getInt(j)));
+                        for (int j = 0; j < sightArray.length(); j++) {
+                            subSights.add(getSightById(sights, sightArray.getInt(j)));
                         }
-                        routes.add(new Route(routeObject.getString("name"), routeObject.getInt("km"),subSights));
+                        routes.add(new Route(routeObject.getString("name"),
+                                routeObject.getInt("km"), subSights));
                     }
                     listener.onReceivedRoutes(routes);
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onError(VolleyError error) {
-
             }
         });
     }
 
-    private Sight getSightById(List<Sight> sights,int id){
-        for(Sight sight : sights){
-            if(sight.getId() == id){
+    private Sight getSightById(List<Sight> sights, int id) {
+        for (Sight sight : sights)
+            if (sight.getId() == id)
                 return sight;
-            }
-        }
-        return  null;
+        return null;
     }
 
-
-    public void getDirections(List<LatLng> wayPoint, DirectionsListener listener){
+    public void getDirections(List<LatLng> wayPoint, DirectionsListener listener) {
         directionsProvider.queueDirectionsRequest(wayPoint, new DirectionsProviderListener() {
             @Override
             public void onReceivedDirections(List<LatLng> directionList) {
@@ -96,17 +92,11 @@ public class RouteManager {
         });
     }
 
-    public void storeRouteProgression(String routeName, int progression){
+    public void storeRouteProgression(String routeName, int progression) {
         databaseManager.storeRouteProgression(routeName, progression);
     }
 
-    public int getRouteProgression(String routeName){
+    public int getRouteProgression(String routeName) {
         return databaseManager.getRouteProgression(routeName);
     }
-
-
-
-
-
-
 }

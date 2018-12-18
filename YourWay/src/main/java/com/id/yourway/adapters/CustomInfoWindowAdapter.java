@@ -1,9 +1,7 @@
 package com.id.yourway.adapters;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,16 +14,12 @@ import com.id.yourway.entities.Sight;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final static String TAG = CustomInfoWindowAdapter.class.getSimpleName();
 
     private Context context;
-    private Resources res;
 
-    public CustomInfoWindowAdapter(Context ctx){
+    public CustomInfoWindowAdapter(Context ctx) {
         context = ctx;
     }
 
@@ -36,19 +30,18 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     @Override
     public View getInfoContents(Marker marker) {
-        View view = ((Activity)context).getLayoutInflater()
+        View view = ((Activity) context).getLayoutInflater()
                 .inflate(R.layout.popup_maps, null);
         Sight sight = (Sight) marker.getTag();
         String authorString = sight.getAuthor();
         String addressString = sight.getAddress();
         ImageView imageView = view.findViewById(R.id.imageView3);
-        if(sight.getType() == "Blindwall") {
-            tryImages(0 ,  sight,  imageView);
-        }
-        else
-        {
+        if (sight.getType().equals("Blindwall")) {
+            tryImages(0, sight, imageView);
+        } else {
             String imageUrl = "" + sight.getImages().get(0);
-            int resid = context.getResources().getIdentifier(context.getPackageName() + ":drawable/p"+ imageUrl, null,null);
+            int resid = context.getResources().getIdentifier(context.getPackageName()
+                    + ":drawable/p" + imageUrl, null, null);
             imageView.setImageResource(resid);
         }
 
@@ -62,7 +55,8 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     }
 
     private void tryImages(int index, Sight sight, ImageView view) {
-        Picasso.get().load(sight.getImages().get(index)).placeholder(R.drawable.placeholder).into(view, new Callback() {
+        Picasso.get().load(sight.getImages().get(index)).
+                placeholder(R.drawable.placeholder).into(view, new Callback() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSuccess: " + sight.getTitle());
