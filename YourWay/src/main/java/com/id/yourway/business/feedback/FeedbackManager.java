@@ -34,4 +34,10 @@ public class FeedbackManager {
         soundManager.playSound(context);
         toastManager.displayToast(context, message, true);
     }
+
+    public void onRouteFinished(Context context) {
+        hapticManager.vibrate(context);
+        soundManager.playSound(context);
+        toastManager.displayToast(context, "Congratulations! You have finished the route!", true);
+    }
 }
