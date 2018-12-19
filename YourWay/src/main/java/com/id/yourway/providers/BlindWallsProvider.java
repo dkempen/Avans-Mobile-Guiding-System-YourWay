@@ -73,7 +73,6 @@ public class BlindWallsProvider implements SightProvider {
                         }
 
                         try {
-                            int s1 = sights.size();
                             JSONArray jsonObj = vvvItems.getJSONArray("response");
                             for (int i = 0; i < jsonObj.length(); i++) {
                                 JSONObject vvv = jsonObj.getJSONObject(i);
@@ -81,7 +80,6 @@ public class BlindWallsProvider implements SightProvider {
                                 double lat = vvv.getDouble("lat");
                                 double lon = vvv.getDouble("long");
                                 String name = vvv.getString("name");
-//                                String note = vvv.getString("note");
                                 int photoid = vvv.getInt("photoid");
                                 String descriptionNL = vvv.getString("description-nl");
                                 String descriptionEN = vvv.getString("description-en");
@@ -89,16 +87,13 @@ public class BlindWallsProvider implements SightProvider {
                                 List<String> imageUrls2 = new ArrayList<>();
                                 imageUrls2.add(String.valueOf(photoid));
 
-                                if (!name.equals("")) {
+                                if (!name.equals(""))
                                     sights.add(new Sight(id, lat, lon, descriptionNL,
                                             descriptionEN, imageUrls2, name, "VVV"));
-                                }
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                         listener.onSightsAvailable(sights);
                     }
 
