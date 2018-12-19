@@ -140,6 +140,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void removeMarkers() {
         for (Marker marker : markerSightMap.keySet())
             marker.remove();
+        markerSightMap.clear();
     }
 
     public void addSight(final Sight sight) {
@@ -183,6 +184,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         RouteManager routeManager = AppContext.getInstance(getContext()).getRouteManager();
         currentRouteIndex = routeManager.getRouteProgression(route.getName());
         nextSight = getMapEntry(route.getSight(currentRouteIndex));
+        setMarkerColors();
+    }
+
+    private void setMarkerColors() {
+        for (int i = 0; i < currentRouteIndex; i++) {
+            Marker marker = getMapEntry(route.getSight(i)).getKey();
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        }
         nextSight.getKey().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
     }
 
@@ -296,11 +305,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private void onSightDiscovered(Marker marker) {
         marker.showInfoWindow();
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
+        currentRouteIndex++;
         AppContext.getInstance(getContext()).getRouteManager().
                 storeRouteProgression(route.getName(), currentRouteIndex);
 
-        currentRouteIndex++;
         if (route.getSights().size() == currentRouteIndex) {
             routeIsFinished();
             return;
