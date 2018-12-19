@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +24,13 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
     private List<Route> routes;
     private MainActivity activity;
     private Context context;
+    private RouteManager routeManager;
 
     public RouteListAdapter(Context context, List<Route> routes, MainActivity activity) {
         this.routes = routes;
         this.activity = activity;
         this.context = context;
+        routeManager = AppContext.getInstance(context).getRouteManager();
     }
 
     @NonNull
@@ -44,6 +47,8 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
         routeViewHolder.nameTextView.setText(currentRoute.getName());
         routeViewHolder.lengthKmTextView.setText(Double.toString(currentRoute.getLengthInKm()) + " km");
         routeViewHolder.numberOfPOIS.setText(Integer.toString(currentRoute.getSights().size()) + " POI's");
+        routeViewHolder.progressBar.setMax(currentRoute.getSights().size());
+        routeViewHolder.progressBar.setProgress(routeManager.getRouteProgression(currentRoute.getName()));
     }
 
 
@@ -55,6 +60,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
     class RouteViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, lengthKmTextView, numberOfPOIS;
         ImageButton reset;
+        ProgressBar progressBar;
 
         RouteViewHolder(@NonNull View itemView, MainActivity activity) {
             super(itemView);
@@ -62,6 +68,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
             lengthKmTextView = itemView.findViewById(R.id.item_route_length_km);
             numberOfPOIS = itemView.findViewById(R.id.item_num_of_pois);
             reset = itemView.findViewById(R.id.reset_route);
+            progressBar = itemView.findViewById(R.id.progressBar2);
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 activity.setRouteAndSwitchToHome(routes.get(position));
