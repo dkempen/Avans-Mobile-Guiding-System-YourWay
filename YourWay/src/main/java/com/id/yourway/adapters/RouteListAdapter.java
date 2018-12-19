@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
@@ -71,6 +72,7 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
                 RouteManager routeManager = AppContext.getInstance(context).getRouteManager();
                 int position = getAdapterPosition();
                 routeManager.storeRouteProgression(routes.get(position).getName(), 0);
+                Toast.makeText(context, "Reset Ok!", Toast.LENGTH_SHORT).show();
             });
         }
     }
