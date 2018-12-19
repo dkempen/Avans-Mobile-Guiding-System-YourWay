@@ -297,11 +297,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private void onSightDiscovered(Marker marker) {
         marker.showInfoWindow();
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
+        currentRouteIndex++;
         AppContext.getInstance(getContext()).getRouteManager().
                 storeRouteProgression(route.getName(), currentRouteIndex);
 
-        currentRouteIndex++;
         if (route.getSights().size() == currentRouteIndex) {
             routeIsFinished();
             return;
