@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         mapFragment.removeMarkers();
         if(mapFragment.getRoute() != null){
             mapFragment.deleteRoute();
+            mapFragment.deletePolyLinesOnMap();
         }
         List<Sight> sights = route.getSights();
         for (Sight sight : sights) {

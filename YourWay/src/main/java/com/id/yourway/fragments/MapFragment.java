@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
@@ -59,6 +58,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private List<Sight> sights;
+    private Polyline polyline;
     private Map<Marker, Sight> markerSightMap;
     private Queue<Runnable> runnables;
     private android.location.Location location;
@@ -249,12 +249,17 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.width(5);
         polyOptions.addAll(list);
 
+
 //        mMap.clear();
-        mMap.addPolyline(polyOptions);
+        polyline = mMap.addPolyline(polyOptions);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (LatLng latLng : list)
             builder.include(latLng);
+    }
+
+    public void deletePolyLinesOnMap(){
+        polyline.remove();
     }
 
     public void drawPolyLineOnMap(LatLng latLng) {
