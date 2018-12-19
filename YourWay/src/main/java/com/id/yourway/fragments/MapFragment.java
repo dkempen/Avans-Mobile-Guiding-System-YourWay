@@ -269,6 +269,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void deletePolyLinesOnMap(){
         polyline.remove();
+        track.setPoints(new ArrayList<>());
     }
 
     public void drawPolyLineOnMap(LatLng latLng) {
