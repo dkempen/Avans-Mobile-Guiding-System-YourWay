@@ -65,6 +65,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Polyline track;
 
     private Route route;
+    private Route lastRoute;
     private int currentRouteIndex;
     private Map.Entry<Marker, Sight> nextSight;
     private static final int SIGHT_TRIGGER_RADIUS = 20;
@@ -334,11 +335,21 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onProviderEnabled(String provider) {
+        List<Sight> sights = lastRoute.getSights();
+        for (Sight sight : sights) {
+            addSightInternal(sight);
+        }
+        setRoute(lastRoute);
+        RouteReady(route);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
         AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
+        lastRoute = route;
+        deletePolyLinesOnMap();
+        removeMarkers();
+        deleteRoute();
     }
 
     @Override
