@@ -78,6 +78,26 @@ public class RouteManager {
         return null;
     }
 
+    public void getDirections(LatLng startLocation, Route route, DirectionsListener listener){
+        List<LatLng> sightDirections = new ArrayList<>();
+        sightDirections.add(startLocation);
+        for(Sight sight : route.getSights())
+        {
+            sightDirections.add(new LatLng(sight.getLatitude(), sight.getLongitude()));
+        }
+        directionsProvider.queueDirectionsRequest(sightDirections, new DirectionsProviderListener() {
+            @Override
+            public void onReceivedDirections(List<LatLng> directionList) {
+                listener.onReceivedDirections(directionList);
+            }
+
+            @Override
+            public void onError(Error error) {
+                listener.onError(error);
+            }
+        });
+    }
+
 
     public void getDirections(Route route, DirectionsListener listener){
         List<LatLng> sightDirections = new ArrayList<>();

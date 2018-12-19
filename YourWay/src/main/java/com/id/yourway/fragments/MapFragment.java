@@ -259,7 +259,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.width(5);
         polyOptions.addAll(list);
 
-
 //        mMap.clear();
         polyline = mMap.addPolyline(polyOptions);
 
@@ -371,7 +370,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void RouteReady(Route route) {
-        AppContext.getInstance(getContext()).getRouteManager().getDirections(route, new DirectionsListener() {
+        AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
             @Override
             public void onReceivedDirections(List<LatLng> directionList) {
                 drawPolyLineOnMap(directionList);
