@@ -26,6 +26,7 @@ import com.id.yourway.fragments.HelpFragment;
 import com.id.yourway.fragments.IDetailFragment;
 import com.id.yourway.fragments.ListFragment;
 import com.id.yourway.fragments.MapFragment;
+import com.id.yourway.fragments.PreferenceFragment;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
 import java.util.HashMap;
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
                 case R.id.settings_item:
-                    Intent intent2 = new Intent(getApplicationContext(), PreferencesActivity.class);
-                    startActivity(intent2);
+                    PreferenceFragment preferenceFragment = new PreferenceFragment();
+                    fragmentManager.beginTransaction().replace(R.id.fragment, preferenceFragment).addToBackStack(null).commitAllowingStateLoss();
                     break;
                 case R.id.help_item:
                     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton settingsButton = findViewById(R.id.toolBarSettingsButton);
         settingsButton.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, PreferencesActivity.class)));
+                openPreferenceFragment());
 
         ImageButton helpButton = findViewById(R.id.toolBarHelpButton);
         helpButton.setOnClickListener(v -> {
@@ -185,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
             actionbar.setTitle("Your Way");
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
+    }
+
+    private void openPreferenceFragment() {
+        PreferenceFragment preferenceFragment = new PreferenceFragment();
+        fragmentManager.beginTransaction().replace(R.id.fragment, preferenceFragment).addToBackStack(null).commitAllowingStateLoss();
     }
 
     public void updateSights() {

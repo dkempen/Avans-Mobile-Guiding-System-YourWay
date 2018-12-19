@@ -55,10 +55,6 @@
         <activity
             android:name=".activities.DetailActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.PreferencesActivity"
-            android:label="@string/title_activity_preferences"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
