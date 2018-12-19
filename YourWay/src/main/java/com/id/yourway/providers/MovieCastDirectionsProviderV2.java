@@ -57,7 +57,6 @@ public class MovieCastDirectionsProviderV2 implements DirectionsProvider {
             restProvider.getRequest(BASE_URL + requestParamList.get(i), new RestProviderListener() {
                 @Override
                 public void onRequestObjectAvailible(JSONObject response) {
-                    int requestNumber = fi;
                     //dit moet een 1 elements array zijn probeer maar eens zonder(btw object kan ook :))
                     completedRequests[0] += 1;
                         try {

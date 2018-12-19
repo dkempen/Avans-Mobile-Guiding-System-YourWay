@@ -1,5 +1,6 @@
 package com.id.yourway.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,8 @@ public class ListFragment extends Fragment implements IDetailFragment {
         super.onCreate(savedInstanceState);
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,8 +43,13 @@ public class ListFragment extends Fragment implements IDetailFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Bundle arguments = getArguments();
         int fragmentType = arguments.getInt("FRAGMENT_TYPE");
         if (fragmentType == IDetailFragment.FRAG_LIST_SIGHT) {
