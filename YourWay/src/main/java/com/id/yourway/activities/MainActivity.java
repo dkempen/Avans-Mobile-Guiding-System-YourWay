@@ -29,6 +29,7 @@ import com.id.yourway.fragments.MapFragment;
 import com.id.yourway.fragments.PreferenceFragment;
 import com.id.yourway.providers.listeners.SightProviderListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupToolbar();
         updateSights();
+
+
         //NavigationDrawer
         fragmentManager = getSupportFragmentManager();
         listFragment = new ListFragment();
