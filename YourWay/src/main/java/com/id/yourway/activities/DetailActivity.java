@@ -2,9 +2,12 @@ package com.id.yourway.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.id.yourway.R;
@@ -34,7 +37,6 @@ public class DetailActivity extends AppCompatActivity {
         muralPhotographer = findViewById(R.id.detailedActivity_photographer);
         muralDescription = findViewById(R.id.detailedActivity_muralDescription);
         muralYear = findViewById(R.id.detailedActivity_year);
-        Toolbar toolbar = findViewById(R.id.toolbar);
 
         Intent intent = getIntent();
         sight = (Sight) intent.getSerializableExtra("SIGHT_OBJECT");
@@ -42,7 +44,7 @@ public class DetailActivity extends AppCompatActivity {
         muralAuthorName.setText(sight.getAuthor());
         muralPhotographer.setText(sight.getPhotographer());
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(muralTitle);
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
@@ -63,5 +65,15 @@ public class DetailActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.detailledviewPagerID);
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, stringArray, sight.getType());
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+
+        return super.onOptionsItemSelected(menuItem);
     }
 }
