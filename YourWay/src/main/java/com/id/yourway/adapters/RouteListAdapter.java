@@ -79,7 +79,8 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
                 RouteManager routeManager = AppContext.getInstance(context).getRouteManager();
                 int position = getAdapterPosition();
                 routeManager.storeRouteProgression(routes.get(position).getName(), 0);
-                Toast.makeText(context, "Reset Ok!", Toast.LENGTH_SHORT).show();
+                AppContext.getInstance(activity.getApplicationContext()).getFeedbackManager()
+                        .onRouteReset(activity.getApplicationContext());
             });
         }
     }
