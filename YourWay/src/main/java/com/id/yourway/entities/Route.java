@@ -8,7 +8,6 @@ public class Route {
 
     private String name;
     private double lengthInKm;
-    private int progress;
 
     public Route(String name, double lengthInKm,  List<Sight> sights) {
         this.name = name;
@@ -22,10 +21,6 @@ public class Route {
 
     public Sight getSight(int index) {
         return sights.get(index);
-    }
-
-    public void setProgress(int progress) {
-        this.progress = progress;
     }
 
     public String getName() {
