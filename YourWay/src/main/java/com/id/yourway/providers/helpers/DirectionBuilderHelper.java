@@ -17,6 +17,7 @@ public class DirectionBuilderHelper {
         StringBuilder requestBuilder = new StringBuilder();
         requestBuilder.append("?key=");
         requestBuilder.append(key);
+        requestBuilder.append("&mode=walking");
         requestBuilder.append("&origin=");
         requestBuilder.append(formatLatLng(wayPoints.get(0)));
         if (wayPoints.size() > 2) {
