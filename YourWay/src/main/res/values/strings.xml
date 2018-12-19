@@ -77,9 +77,26 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam convallis dolor dictum libero scelerisque, nec laoreet sem lobortis. Praesent sed ligula ullamcorper, placerat urna ut, finibus lectus. Proin sagittis, massa at dictum aliquet, nibh ligula imperdiet magna, vitae gravida dolor sapien et risus. Curabitur vitae mi non nulla elementum feugiat id eleifend ipsum. Ut semper turpis nec imperdiet consectetur. Sed ornare bibendum dui, in rhoncus orci dapibus eu. Donec dui magna, suscipit et pellentesque vel, elementum tincidunt nisl. Nulla eu semper turpis. Nulla dignissim, nunc non auctor pulvinar, libero augue faucibus sem, sed consectetur turpis nunc vel justo. Morbi sit amet mauris et diam ullamcorper molestie eget eget nisl. Aenean quis dignissim dui. Ut eu diam libero. Vivamus leo leo, malesuada et nibh quis, sodales imperdiet magna.</string>
-    <string name="confirm_button"> Got it</string>
+    <string name="hello_blank_fragment">
+        <b>General:</b>\n
+        In this application you can walk a route.
+        You can select this in the menu what you can open with the button in the left corner\n\n
+
+        <b>Map:</b>\n
+        The map gives all the possible points you can visit with the routes.
+        If you click one you get information.
+        It also displays the routes after you select one in routes.\n\n
+
+        <b>Routes:</b>\n
+        In the route selector you can select or reset a route.
+        The routes will continue where you left it last of.\n\n
+
+        <b>Sights:</b>\n
+        You can see a list of sights and get more detailed information from the sights.\n\n
+
+        <b>Settings:</b>\n
+        You can change the settings here. Like if you want it to vibrate.
+    </string>
 
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>

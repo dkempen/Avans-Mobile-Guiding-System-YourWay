@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.id.yourway.R;
+import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.MainActivity;
+import com.id.yourway.business.RouteManager;
 import com.id.yourway.entities.Route;
 
 import java.util.List;
@@ -18,10 +21,12 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
 
     private List<Route> routes;
     private MainActivity activity;
+    private Context context;
 
     public RouteListAdapter(Context context, List<Route> routes, MainActivity activity) {
         this.routes = routes;
         this.activity = activity;
+        this.context = context;
     }
 
     @NonNull
@@ -48,17 +53,24 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
 
     class RouteViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView, lengthKmTextView, numberOfPOIS;
+        ImageButton reset;
 
         RouteViewHolder(@NonNull View itemView, MainActivity activity) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.item_route_name);
             lengthKmTextView = itemView.findViewById(R.id.item_route_length_km);
             numberOfPOIS = itemView.findViewById(R.id.item_num_of_pois);
+            reset = itemView.findViewById(R.id.reset_route);
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 activity.setRouteAndSwitchToHome(routes.get(position));
 
                 //do things
+            });
+            reset.setOnClickListener(v ->{
+                RouteManager routeManager = AppContext.getInstance(context).getRouteManager();
+                int position = getAdapterPosition();
+                routeManager.storeRouteProgression(routes.get(position).getName(), 0);
             });
         }
     }

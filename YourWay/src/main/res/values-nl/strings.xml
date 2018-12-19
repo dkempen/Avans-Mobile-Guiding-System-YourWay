@@ -21,6 +21,27 @@
     <string name="drawer_close">Close drawer</string>
     <string name="HeaderName">Henk</string>
     <string name="Kleurenblind">Kleurenblind</string>
+
+    <string name="hello_blank_fragment">
+        <b>General:</b>\n
+        In this application you can walk a route.
+        You can select this in the menu what you can open with the button in the left corner\n\n
+
+        <b>Map:</b>\n
+        The map gives all the possible points you can visit with the routes.
+        If you click one you get information.
+        It also displays the routes after you select one in routes.\n\n
+
+        <b>Routes:</b>\n
+        In the route selector you can select or reset a route.
+        The routes will continue where you left it last of.\n\n
+
+        <b>Sights:</b>\n
+        You can see a list of sights and get more detailed information from the sights.\n\n
+
+        <b>Settings:</b>\n
+        You can change the settings here. Like if you want it to vibrate.
+    </string>
     <string name="Vibrate">Trilstand</string>
     <string name="map">Map</string>
     <string name="route">Route</string>
@@ -31,4 +52,7 @@
     <string name="author">Auteur:</string>
     <string name="photographer">Fotograaf:</string>
     <string name="confirm_button">Ik snap het!</string>
+    <string name="mapFragmentTitle">Kaart</string>
+    <string name="routesFragmentTitle">Routes</string>
+    <string name="sightFragmentTitle">BEzienswaardigheden</string>
 </resources>
