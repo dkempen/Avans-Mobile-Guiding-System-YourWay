@@ -140,6 +140,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void removeMarkers() {
         for (Marker marker : markerSightMap.keySet())
             marker.remove();
+        markerSightMap.clear();
     }
 
     public void addSight(final Sight sight) {
