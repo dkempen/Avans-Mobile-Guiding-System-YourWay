@@ -23,24 +23,24 @@
     <string name="Kleurenblind">Kleurenblind</string>
 
     <string name="hello_blank_fragment">
-        <b>General:</b>\n
-        In this application you can walk a route.
-        You can select this in the menu what you can open with the button in the left corner\n\n
+        <b>Algemeen:</b>\n
+        In deze applicatie kun je een route lopen.
+        Je kan dit selecteren in het menu. Je gaat hierheen door links bovenin het menu te openen\n\n
 
-        <b>Map:</b>\n
-        The map gives all the possible points you can visit with the routes.
-        If you click one you get information.
-        It also displays the routes after you select one in routes.\n\n
+        <b>Kaart:</b>\n
+        Op de kaart staan alle bezoekbaren punten van de routes.
+        Als je er op klikt krijg je een detail informatie.
+        Het laat ook een route zien als je die selecteert.\n\n
 
         <b>Routes:</b>\n
-        In the route selector you can select or reset a route.
-        The routes will continue where you left it last of.\n\n
+        In het route menu kun je een route selecteren, die je kan resseten.
+        De route gaat verder waar je het laatst gebeleven bent.\n\n
 
-        <b>Sights:</b>\n
-        You can see a list of sights and get more detailed information from the sights.\n\n
+        <b>bezienswaardigheden:</b>\n
+        Je kan een lijst met bezienswaardigheden zien en die zijn klikbaar voor meer informatie.\n\n
 
-        <b>Settings:</b>\n
-        You can change the settings here. Like if you want it to vibrate.
+        <b>Instellingen:</b>\n
+        Je kan de instellingen aanpassen. Als je wilt dat trillen aan staat.
     </string>
     <string name="Vibrate">Trilstand</string>
     <string name="map">Map</string>
