@@ -231,6 +231,11 @@ public class MainActivity extends AppCompatActivity {
         toolbarTitle.setText(title);
     }
 
+    public void setToolbarSettingsEnabled(boolean settingsEnabled) {
+        ImageButton settingsButton = findViewById(R.id.toolBarSettingsButton);
+        settingsButton.setVisibility(settingsEnabled ? View.VISIBLE : View.INVISIBLE);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {

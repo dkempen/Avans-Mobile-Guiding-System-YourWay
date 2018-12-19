@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 import com.id.yourway.R;
+import com.id.yourway.activities.MainActivity;
 
 public class PreferenceFragment extends Fragment {
     public static boolean Vibrate = true;
@@ -35,6 +36,22 @@ public class PreferenceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setToolbarSettingsEnabled(false);
+        mainActivity.setToolbarTitle("Your Way");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setToolbarSettingsEnabled(true);
+        mainActivity.setToolbarTitle("Your Way");
     }
 
     public static boolean isVibrate() {
