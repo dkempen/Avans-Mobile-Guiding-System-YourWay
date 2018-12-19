@@ -51,8 +51,8 @@
     <string name="year">Jaar:</string>
     <string name="author">Auteur:</string>
     <string name="photographer">Fotograaf:</string>
-    <string name="confirm_button">Ik snap het!</string>
     <string name="mapFragmentTitle">Kaart</string>
     <string name="routesFragmentTitle">Routes</string>
     <string name="sightFragmentTitle">BEzienswaardigheden</string>
+    <string name="confirm_button">Ik snap het!</string>
 </resources>
