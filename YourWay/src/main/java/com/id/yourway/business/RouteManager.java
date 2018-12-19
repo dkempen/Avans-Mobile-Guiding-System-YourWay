@@ -44,7 +44,7 @@ public class RouteManager {
                 try {
                     List<Sight> vvvRouteList = sights.subList(sights.size()
                             - JsonLoaderHelper.VVV_ITEM_SIZE - 1, sights.size() - 1);
-                    Route vvvRoute = new Route("vvv route", 1000, vvvRouteList);
+                    Route vvvRoute = new Route("VVV Route", 3, vvvRouteList);
                     routes.add(vvvRoute);
 
 //                    List<Sight> bwRouteList = sights.subList(0, sights.size() -1);
