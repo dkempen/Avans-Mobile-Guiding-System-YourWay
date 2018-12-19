@@ -118,4 +118,7 @@
     <string name="mapFragmentTitle">Map</string>
     <string name="routesFragmentTitle">Routes</string>
     <string name="sightFragmentTitle">Sights</string>
+    <string name="feedbackOnGpsLost">GPS Connection Lost</string>
+    <string name="feedbackOnInternetLost">Internet Connection Lost</string>
+    <string name="feedbackOnRouteFinish">Congratulations! You have finished the route!</string>
 </resources>

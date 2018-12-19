@@ -2,6 +2,8 @@ package com.id.yourway.business.feedback;
 
 import android.content.Context;
 
+import com.id.yourway.R;
+
 public class FeedbackManager {
 
     private final HapticManager hapticManager;
@@ -21,12 +23,12 @@ public class FeedbackManager {
 
     public void onGPSLost(Context context) {
         hapticManager.vibrate(context);
-        toastManager.displayToast(context, "GPS Connection Lost", true);
+        toastManager.displayToast(context, context.getString(R.string.feedbackOnGpsLost), true);
     }
 
     public void onInternetLost(Context context) {
         hapticManager.vibrate(context);
-        toastManager.displayToast(context, "Internet Connection Lost", true);
+        toastManager.displayToast(context, context.getString(R.string.feedbackOnInternetLost), true);
     }
 
     public void onError(Context context, String message) {
@@ -38,6 +40,6 @@ public class FeedbackManager {
     public void onRouteFinished(Context context) {
         hapticManager.vibrate(context);
         soundManager.playSound(context);
-        toastManager.displayToast(context, "Congratulations! You have finished the route!", true);
+        toastManager.displayToast(context, context.getString(R.string.feedbackOnRouteFinish), true);
     }
 }
