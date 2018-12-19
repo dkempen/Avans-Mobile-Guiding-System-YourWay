@@ -184,6 +184,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         RouteManager routeManager = AppContext.getInstance(getContext()).getRouteManager();
         currentRouteIndex = routeManager.getRouteProgression(route.getName());
         nextSight = getMapEntry(route.getSight(currentRouteIndex));
+        setMarkerColors();
+    }
+
+    private void setMarkerColors() {
+        for (int i = 0; i < currentRouteIndex; i++) {
+            Marker marker = getMapEntry(route.getSight(i)).getKey();
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        }
         nextSight.getKey().setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
     }
 
