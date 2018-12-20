@@ -1,0 +1,14 @@
+[
+  {
+    "id"   :  0,
+    "name" : "BlindWalls Route 1",
+    "km": 1,
+    "sights": [43,46,53,42,41,40]
+  },
+  {
+    "id"   : 1,
+    "name" : "BlindWalls Route 2",
+    "km": 1,
+    "sights": [33,31,32,1,49,10,34,35,15,9,36,50,5]
+  }
+]

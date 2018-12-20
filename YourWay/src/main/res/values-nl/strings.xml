@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YourWay</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_preferences">Instellingen</string>
+    <string name="pref_header_general">Algemeen</string>
+    <string name="pref_title_social_recommendations">Activeer aanbevelingen</string>
+    <string name="pref_description_social_recommendations">Aanbevelingen voor mensen gebaseerd op berichten geschiedenis</string>
+    <string name="pref_title_display_name">Weergave naam</string>
+    <string name="pref_default_display_name">Piet ppan</string>
+    <string name="pref_title_add_friends_to_messages">Voeg mensen toe aan het bericht</string>
+    <string name="pref_header_data_sync">Vernieuwen</string>
+    <string name="pref_title_sync_frequency">Verniew snelheid</string>
+    <string name="pref_title_system_sync_settings">Systeem vernieuw settings</string>
+    <string name="pref_header_notifications">Notificaties</string>
+    <string name="pref_title_new_message_notifications">Nieuw bericht notificatie</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Stil</string>
+    <string name="pref_title_vibrate">Tril</string>
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+    <string name="HeaderName">Henk</string>
+    <string name="Kleurenblind">Kleurenblind</string>
+
+    <string name="hello_blank_fragment">
+        <b>Algemeen:</b>\n
+        In deze applicatie kun je een route lopen.
+        Je kan dit selecteren in het menu. Je gaat hierheen door links bovenin het menu te openen\n\n
+
+        <b>Kaart:</b>\n
+        Op de kaart staan alle bezoekbaren punten van de routes.
+        Als je er op klikt krijg je een detail informatie.
+        Het laat ook een route zien als je die selecteert.\n\n
+
+        <b>Routes:</b>\n
+        In het route menu kun je een route selecteren, die je kan resseten.
+        De route gaat verder waar je het laatst gebeleven bent.\n\n
+
+        <b>bezienswaardigheden:</b>\n
+        Je kan een lijst met bezienswaardigheden zien en die zijn klikbaar voor meer informatie.\n\n
+
+        <b>Instellingen:</b>\n
+        Je kan de instellingen aanpassen. Als je wilt dat trillen aan staat.
+    </string>
+    <string name="Vibrate">Trilstand</string>
+    <string name="map">Map</string>
+    <string name="route">Route</string>
+    <string name="Sight">Bezienswaardigheid</string>
+    <string name="Settings">Instellingen</string>
+    <string name="Help">Help</string>
+    <string name="year">Jaar:</string>
+    <string name="author">Auteur:</string>
+    <string name="photographer">Fotograaf:</string>
+    <string name="mapFragmentTitle">Kaart</string>
+    <string name="routesFragmentTitle">Routes</string>
+    <string name="sightFragmentTitle">BEzienswaardigheden</string>
+    <string name="confirm_button">Ik snap het!</string>
+    <string name="feedbackOnGpsLost">GPS Connectie Verloren</string>
+    <string name="feedbackOnInternetLost">Internet Connectie Verloren</string>
+    <string name="feedbackOnRouteFinish">Gefeliciteerd! U heeft de route voltooid!</string>
+    <string name="feedbackOnRouteReset">De voortgang van deze route is gereset</string>
+</resources>
