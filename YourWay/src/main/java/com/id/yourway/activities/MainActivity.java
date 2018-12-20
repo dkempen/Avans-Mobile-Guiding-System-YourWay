@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
                 case R.id.settings_item:
                     PreferenceFragment preferenceFragment = new PreferenceFragment();
-                    fragmentManager.beginTransaction().add(R.id.fragment, preferenceFragment).addToBackStack(null).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().replace(R.id.fragment, preferenceFragment).addToBackStack(null).commitAllowingStateLoss();
                     break;
                 case R.id.help_item:
                     FragmentManager fragmentManager = getSupportFragmentManager();
