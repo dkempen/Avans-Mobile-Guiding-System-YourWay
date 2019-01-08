@@ -137,20 +137,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setRouteReadyListener(RouteReadyListener raListener){
+    public void setRouteReadyListener(RouteReadyListener raListener) {
         this.raListener = raListener;
     }
 
 
-    public void setRouteAndSwitchToHome(Route route){
+    public void setRouteAndSwitchToHome(Route route) {
         fragmentManager.beginTransaction().replace(R.id.fragment,
                 mapFragment).addToBackStack(null).commitAllowingStateLoss();
-        if(raListener != null){
+        if (raListener != null) {
             raListener.RouteReady(route);
         }
         //this.route = route;
         mapFragment.removeMarkers();
-        if(mapFragment.getRoute() != null){
+        if (mapFragment.getRoute() != null) {
             mapFragment.deleteRoute();
             mapFragment.deletePolyLinesOnMap();
         }

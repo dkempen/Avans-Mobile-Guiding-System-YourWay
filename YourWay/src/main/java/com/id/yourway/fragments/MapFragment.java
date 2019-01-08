@@ -1,6 +1,7 @@
 package com.id.yourway.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -134,7 +135,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         for (Runnable runnable : runnables)
             runnable.run();
-        MainActivity mainActivity = (MainActivity)getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setRouteReadyListener(this);
     }
 
@@ -200,7 +201,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         return route;
     }
 
-    public void deleteRoute(){
+    public void deleteRoute() {
         this.route = null;
     }
 
@@ -267,9 +268,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             builder.include(latLng);
     }
 
-    public void deletePolyLinesOnMap(){
-        polyline.remove();
-        track.setPoints(new ArrayList<>());
+    public void deletePolyLinesOnMap() {
+        if(polyline != null)
+        {
+            polyline.remove();
+            track.setPoints(new ArrayList<>());
+        }
     }
 
     public void drawPolyLineOnMap(LatLng latLng) {
@@ -371,16 +375,32 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void RouteReady(Route route) {
-        AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
-            @Override
-            public void onReceivedDirections(List<LatLng> directionList) {
-                drawPolyLineOnMap(directionList);
-            }
+        if (checkPermission()) {
+            AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
+                @Override
+                public void onReceivedDirections(List<LatLng> directionList) {
+                    drawPolyLineOnMap(directionList);
+                }
 
-            @Override
-            public void onError(Error error) {
-                Log.e("oh no ", "oh no");
+                @Override
+                public void onError(Error error) {
+                    Log.e("oh no ", "oh no");
+                }
+            });
+        } else {
+            requestPermission();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS_ID) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                AppContext.getInstance(getContext())
+                        .getFeedbackManager()
+                        .onError(getContext(), String.valueOf("GPS not enabled!"));
             }
-        });
+        }
     }
 }
