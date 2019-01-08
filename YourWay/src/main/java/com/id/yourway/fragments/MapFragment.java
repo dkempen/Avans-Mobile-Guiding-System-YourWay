@@ -58,6 +58,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             Arrays.asList(new Gap(20), new Dash(20));
 
     private GoogleMap mMap;
+    private LocationManager locationManager;
     private List<Sight> sights;
     private Polyline polyline;
     private Map<Marker, Sight> markerSightMap;
@@ -213,7 +214,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public android.location.Location getGps(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         // getting GPS status
         boolean isGPSEnabled = false;
@@ -377,6 +378,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void RouteReady(Route route) {
         if (checkPermission()) {
+            if(location == null){
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        0, 0, this, null);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
             AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
                 @Override
                 public void onReceivedDirections(List<LatLng> directionList) {
@@ -385,11 +391,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
                 @Override
                 public void onError(Error error) {
-                    Log.e("oh no ", "oh no");
+                    Log.e("FUCKM", "oh no");
                 }
             });
         } else {
             requestPermission();
+            Log.e("FUCKM", "oh not this");
         }
     }
 
