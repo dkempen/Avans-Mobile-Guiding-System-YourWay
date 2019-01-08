@@ -23,7 +23,7 @@ public class PreferenceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         v = inflater.inflate(R.layout.fragment_preference, null, false);
-        Switch vibrateSwitch = v.findViewById(R.id.vibrate_switch);
+        Switch vibrateSwitch = v.findViewById(R.id.settingsVibrateSwitch);
         vibrateSwitch.setOnClickListener(view -> {
             if (vibrateSwitch.isEnabled()) {
                 Vibrate = false;

@@ -311,6 +311,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         marker.showInfoWindow();
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+        AppContext.getInstance(getContext()).getFeedbackManager().onNearbySight(getContext());
 
         currentRouteIndex++;
         AppContext.getInstance(getContext()).getRouteManager().
