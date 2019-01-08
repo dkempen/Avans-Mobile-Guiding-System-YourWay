@@ -139,12 +139,13 @@ public class MainActivity extends AppCompatActivity {
         this.raListener = raListener;
     }
 
-
-    public void setRouteAndSwitchToHome(Route route) {
-        fragmentManager.beginTransaction().replace(R.id.fragment,
-                mapFragment).addToBackStack(null).commitAllowingStateLoss();
-        if (raListener != null) {
-            raListener.RouteReady(route);
+    public void setRoute(Route route, boolean switchToHome) {
+        if (switchToHome) {
+            fragmentManager.beginTransaction().replace(R.id.fragment,
+                    mapFragment).addToBackStack(null).commitAllowingStateLoss();
+            if (raListener != null) {
+                raListener.RouteReady(route);
+            }
         }
         //this.route = route;
         mapFragment.removeMarkers();
@@ -157,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
             mapFragment.addSightInternal(sight);
         }
         mapFragment.setRoute(route);
-        Log.e("hello", "hello");
     }
 
     private void setupToolbar() {
