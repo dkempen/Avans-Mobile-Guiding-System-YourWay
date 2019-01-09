@@ -87,6 +87,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private CardView arrow;
     private float lastCameraBearing;
     private Button pauseButton;
+    private boolean isPaused;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,13 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mainChild.addView(addedView);
         arrow = addedView.findViewById(R.id.mapArrowCardView);
         pauseButton = addedView.findViewById(R.id.mapPauseButton);
+        pauseButton.setOnClickListener(view -> {
+            isPaused = !isPaused;
+            if(isPaused)
+                pauseButton.setText(R.string.mapResumeButton);
+            else
+                pauseButton.setText(R.string.mapPauseButton);
+        });
 
         return mainView;
     }
@@ -314,6 +322,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+        if (isPaused)
+            return;
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
         checkForNearSight(location);
         updateDirection();
