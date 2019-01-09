@@ -29,8 +29,14 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
+
+    public void resetRefresh(){
+        isRefreshed = false;
+    }
+
     @Override
     public View getInfoContents(Marker marker) {
+
         View view = ((Activity) context).getLayoutInflater()
                 .inflate(R.layout.popup_maps, null);
         Sight sight = (Sight) marker.getTag();
@@ -61,7 +67,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         String plainUrl = wronglyFormatedUrl.substring(0, extIndex);
         String extension = wronglyFormatedUrl.substring(extIndex).toLowerCase();
         String newUrl = plainUrl+extension;
-        Picasso.get().load(newUrl).into(view, new Callback() {
+        Picasso.get().load(newUrl).placeholder(R.drawable.placeholder).into(view, new Callback() {
             @Override
             public void onSuccess() {
 

@@ -60,7 +60,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener, LocationListener,
         GoogleMap.OnInfoWindowClickListener, RouteReadyListener,
-        GoogleMap.OnCameraIdleListener {
+        GoogleMap.OnCameraIdleListener, GoogleMap.OnInfoWindowCloseListener {
 
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
@@ -75,6 +75,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Queue<Runnable> runnables;
     private android.location.Location location;
     private Polyline track;
+    private CustomInfoWindowAdapter customInfoWindow;
 
     private Route route;
     private Route lastRoute;
@@ -119,6 +120,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnInfoWindowCloseListener(this);
 
         if (!checkPermission())
             requestPermission();
@@ -187,7 +189,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public void addSightInternal(Sight sight) {
-        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(getContext());
+        customInfoWindow = new CustomInfoWindowAdapter(getContext());
         mMap.setInfoWindowAdapter(customInfoWindow);
         MarkerOptions options = null;
 
@@ -459,5 +461,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private boolean areEqualFloat(float a, float b) {
         return (Math.abs((a / b) - 1.0) < 0.001);
+    }
+
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        customInfoWindow.resetRefresh();
     }
 }
