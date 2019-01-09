@@ -77,7 +77,11 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
                 int position = getAdapterPosition();
                 routeManager.storeRouteProgression(routes.get(position).getName(), 0);
                 progressBar.setProgress(0);
-                activity.setRoute(routes.get(position), false);
+
+                Route activeRoute = activity.getMapFragment().getRoute();
+                if(activeRoute != null && activeRoute.getName().equals(routes.get(position).getName()))
+                    activity.setRouteProgress(routes.get(position));
+
                 AppContext.getInstance(activity.getApplicationContext()).getFeedbackManager()
                         .onRouteReset(activity.getApplicationContext());
             });

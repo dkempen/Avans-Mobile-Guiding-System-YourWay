@@ -170,6 +170,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         markerSightMap.clear();
     }
 
+    public void resetPolyLineWithNewLocation(){
+        track.remove();
+    }
+
     public void addSight(final Sight sight) {
         if (!sights.contains(sight)) {
             sights.add(sight);

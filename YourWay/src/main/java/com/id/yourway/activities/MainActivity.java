@@ -139,24 +139,27 @@ public class MainActivity extends AppCompatActivity {
         this.raListener = raListener;
     }
 
+    public void setRouteProgress(Route route){
+        mapFragment.setRoute(route);
+        mapFragment.resetPolyLineWithNewLocation();
+
+    }
+
     public void setRoute(Route route, boolean switchToHome) {
         if (switchToHome) {
             fragmentManager.beginTransaction().replace(R.id.fragment,
                     mapFragment).addToBackStack(null).commitAllowingStateLoss();
-            if (raListener != null) {
+            if (raListener != null)
                 raListener.RouteReady(route);
-            }
         }
-        //this.route = route;
         mapFragment.removeMarkers();
         if (mapFragment.getRoute() != null) {
             mapFragment.deleteRoute();
             mapFragment.deletePolyLinesOnMap();
         }
         List<Sight> sights = route.getSights();
-        for (Sight sight : sights) {
+        for (Sight sight : sights)
             mapFragment.addSightInternal(sight);
-        }
         mapFragment.setRoute(route);
     }
 
@@ -224,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Sight> getSights() {
         return sights;
+    }
+
+    public MapFragment getMapFragment() {
+        return mapFragment;
     }
 
     public void setToolbarTitle(String title) {
