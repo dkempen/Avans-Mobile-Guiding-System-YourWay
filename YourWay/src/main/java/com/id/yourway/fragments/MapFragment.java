@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -85,6 +86,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private CardView arrow;
     private float lastCameraBearing;
+    private Button pauseButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         FrameLayout mainChild = (FrameLayout) ((ViewGroup) mainView).getChildAt(0);
         mainChild.addView(addedView);
         arrow = addedView.findViewById(R.id.mapArrowCardView);
+        pauseButton = addedView.findViewById(R.id.mapPauseButton);
 
         return mainView;
     }
