@@ -16,7 +16,7 @@
             android:id="@+id/sight_item"
             android:title="@string/Sight" />
         <item
-            android:icon="@drawable/settings"
+            android:icon="@drawable/settingshelp"
             android:id="@+id/settings_item"
             android:title="@string/Settings" />
         <item
