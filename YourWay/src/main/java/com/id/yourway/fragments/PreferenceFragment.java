@@ -1,9 +1,7 @@
 package com.id.yourway.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,18 +13,12 @@ import android.widget.Switch;
 import com.id.yourway.R;
 import com.id.yourway.activities.MainActivity;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class PreferenceFragment extends Fragment {
-
-    Vibrator vibrator;
-    View v;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        v = inflater.inflate(R.layout.fragment_preference, null, false);
+        View v = inflater.inflate(R.layout.fragment_preference, null, false);
         Switch vibrateSwitch = v.findViewById(R.id.settingsVibrateSwitch);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
