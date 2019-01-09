@@ -10,8 +10,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
@@ -49,8 +58,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener,
-        GoogleMap.OnInfoWindowClickListener, RouteReadyListener {
+        GoogleMap.OnMarkerClickListener, LocationListener,
+        GoogleMap.OnInfoWindowClickListener, RouteReadyListener,
+        GoogleMap.OnCameraIdleListener {
 
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
@@ -72,8 +82,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Map.Entry<Marker, Sight> nextSight;
     private static final int SIGHT_TRIGGER_RADIUS = 20;
 
-    public MapFragment() {
-    }
+    private CardView arrow;
+    private float lastCameraBearing;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +92,20 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         sights = new ArrayList<>();
         markerSightMap = new HashMap<>();
         runnables = new LinkedBlockingQueue<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View mainView = super.onCreateView(layoutInflater, viewGroup, bundle);
+        if (arrow != null)
+            return mainView;
+        View addedView = layoutInflater.inflate(R.layout.fragment_map, viewGroup, false);
+
+        FrameLayout mainChild = (FrameLayout) ((ViewGroup) mainView).getChildAt(0);
+        mainChild.addView(addedView);
+        arrow = addedView.findViewById(R.id.mapArrowCardView);
+
+        return mainView;
     }
 
     @Override
@@ -119,7 +143,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setMinZoomPreference(13);
         mMap.setMaxZoomPreference(20);
         mMap.setOnMarkerClickListener(this);
-        mMap.setOnCameraMoveListener(this);
+        mMap.setOnCameraIdleListener(this);
         mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -177,8 +201,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         Marker marker = mMap.addMarker(options);
         marker.setTag(sight);
-//        marker.showInfoWindow();
-
         markerSightMap.put(marker, sight);
     }
 
@@ -218,9 +240,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         // getting GPS status
         boolean isGPSEnabled = false;
-        if (locationManager != null) {
+        if (locationManager != null)
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }
 
         if (isGPSEnabled) {
             if (location == null) {
@@ -241,7 +262,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
             }
         }
-//        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
         return null;
     }
 
@@ -260,8 +280,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.color(Color.BLUE);
         polyOptions.width(5);
         polyOptions.addAll(list);
-
-//        mMap.clear();
         polyline = mMap.addPolyline(polyOptions);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -270,8 +288,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public void deletePolyLinesOnMap() {
-        if(polyline != null)
-        {
+        if (polyline != null) {
             polyline.remove();
             track.setPoints(new ArrayList<>());
         }
@@ -290,6 +307,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         this.location = location;
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
         checkForNearSight(location);
+        updateDirection();
     }
 
     private void checkForNearSight(Location location) {
@@ -359,10 +377,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     @Override
-    public void onCameraMove() {
-    }
-
-    @Override
     public boolean onMarkerClick(Marker marker) {
         return false;
     }
@@ -378,7 +392,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void RouteReady(Route route) {
         if (checkPermission()) {
-            if(location == null){
+            if (location == null) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                         0, 0, this, null);
                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -410,5 +424,36 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                         .onError(getContext(), String.valueOf("GPS not enabled!"));
             }
         }
+    }
+
+    private void updateDirection() {
+        if (nextSight == null) {
+            arrow.setVisibility(View.INVISIBLE);
+            return;
+        } else if (arrow.getVisibility() == View.INVISIBLE)
+            arrow.setVisibility(View.VISIBLE);
+
+        Sight sight = nextSight.getValue();
+        if (location == null || sight == null)
+            return;
+        Location sightLocation = new Location("");
+        sightLocation.setLatitude(sight.getLatitude());
+        sightLocation.setLongitude(sight.getLongitude());
+
+        float bearing = location.bearingTo(sightLocation) - mMap.getCameraPosition().bearing;
+        arrow.setRotation(bearing);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        float bearing = mMap.getCameraPosition().bearing;
+        if (areEqualFloat(bearing, lastCameraBearing))
+            return;
+        lastCameraBearing = bearing;
+        updateDirection();
+    }
+
+    private boolean areEqualFloat(float a, float b) {
+        return (Math.abs((a / b) - 1.0) < 0.001);
     }
 }
