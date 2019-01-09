@@ -92,4 +92,6 @@
     <string name="feedbackOnInternetLost">Internet Connectie Verloren</string>
     <string name="feedbackOnRouteFinish">Gefeliciteerd! U heeft de route voltooid!</string>
     <string name="feedbackOnRouteReset">De voortgang van deze route is gereset</string>
+    <string name="mapPauseButton">Pauze</string>
+    <string name="mapResumeButton">Hervat</string>
 </resources>

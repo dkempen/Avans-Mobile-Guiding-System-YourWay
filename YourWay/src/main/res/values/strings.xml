@@ -153,4 +153,6 @@
     <string name="feedbackOnInternetLost">Internet Connection Lost</string>
     <string name="feedbackOnRouteFinish">Congratulations! You have finished the route!</string>
     <string name="feedbackOnRouteReset">The progress of this route has been reset</string>
+    <string name="mapPauseButton">Pause</string>
+    <string name="mapResumeButton">Resume</string>
 </resources>

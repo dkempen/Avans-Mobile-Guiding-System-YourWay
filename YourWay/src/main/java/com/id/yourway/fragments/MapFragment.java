@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -85,6 +86,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private CardView arrow;
     private float lastCameraBearing;
+    private Button pauseButton;
+    private boolean isPaused;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         FrameLayout mainChild = (FrameLayout) ((ViewGroup) mainView).getChildAt(0);
         mainChild.addView(addedView);
         arrow = addedView.findViewById(R.id.mapArrowCardView);
+        pauseButton = addedView.findViewById(R.id.mapPauseButton);
+        pauseButton.setOnClickListener(view -> {
+            isPaused = !isPaused;
+            if(isPaused)
+                pauseButton.setText(R.string.mapResumeButton);
+            else
+                pauseButton.setText(R.string.mapPauseButton);
+        });
 
         return mainView;
     }
@@ -311,6 +322,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+        if (isPaused)
+            return;
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
         checkForNearSight(location);
         updateDirection();
