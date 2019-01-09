@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
@@ -71,15 +70,18 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Rout
             progressBar = itemView.findViewById(R.id.progressBar2);
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                activity.setRouteAndSwitchToHome(routes.get(position));
-
-                //do things
+                activity.setRoute(routes.get(position), true);
             });
             reset.setOnClickListener(v ->{
                 RouteManager routeManager = AppContext.getInstance(context).getRouteManager();
                 int position = getAdapterPosition();
                 routeManager.storeRouteProgression(routes.get(position).getName(), 0);
                 progressBar.setProgress(0);
+
+                Route activeRoute = activity.getMapFragment().getRoute();
+                if(activeRoute != null && activeRoute.getName().equals(routes.get(position).getName()))
+                    activity.setRouteProgress(routes.get(position));
+
                 AppContext.getInstance(activity.getApplicationContext()).getFeedbackManager()
                         .onRouteReset(activity.getApplicationContext());
             });

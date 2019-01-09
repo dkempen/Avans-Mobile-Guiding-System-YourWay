@@ -1,6 +1,7 @@
 package com.id.yourway.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,8 +10,17 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.id.yourway.R;
 import com.id.yourway.activities.AppContext;
 import com.id.yourway.activities.DetailActivity;
 import com.id.yourway.activities.MainActivity;
@@ -48,8 +59,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener, LocationListener,
-        GoogleMap.OnInfoWindowClickListener, RouteReadyListener {
+        GoogleMap.OnMarkerClickListener, LocationListener,
+        GoogleMap.OnInfoWindowClickListener, RouteReadyListener,
+        GoogleMap.OnCameraIdleListener, GoogleMap.OnInfoWindowCloseListener {
 
     private static final String TAG = MapFragment.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_ID = 1;
@@ -57,12 +69,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             Arrays.asList(new Gap(20), new Dash(20));
 
     private GoogleMap mMap;
+    private LocationManager locationManager;
     private List<Sight> sights;
     private Polyline polyline;
     private Map<Marker, Sight> markerSightMap;
     private Queue<Runnable> runnables;
     private android.location.Location location;
     private Polyline track;
+    private CustomInfoWindowAdapter customInfoWindow;
 
     private Route route;
     private Route lastRoute;
@@ -70,8 +84,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Map.Entry<Marker, Sight> nextSight;
     private static final int SIGHT_TRIGGER_RADIUS = 20;
 
-    public MapFragment() {
-    }
+    private CardView arrow;
+    private float lastCameraBearing;
+    private Button pauseButton;
+    private boolean isPaused;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +96,28 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         sights = new ArrayList<>();
         markerSightMap = new HashMap<>();
         runnables = new LinkedBlockingQueue<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View mainView = super.onCreateView(layoutInflater, viewGroup, bundle);
+        if (arrow != null)
+            return mainView;
+        View addedView = layoutInflater.inflate(R.layout.fragment_map, viewGroup, false);
+
+        FrameLayout mainChild = (FrameLayout) ((ViewGroup) mainView).getChildAt(0);
+        mainChild.addView(addedView);
+        arrow = addedView.findViewById(R.id.mapArrowCardView);
+        pauseButton = addedView.findViewById(R.id.mapPauseButton);
+        pauseButton.setOnClickListener(view -> {
+            isPaused = !isPaused;
+            if(isPaused)
+                pauseButton.setText(R.string.mapResumeButton);
+            else
+                pauseButton.setText(R.string.mapPauseButton);
+        });
+
+        return mainView;
     }
 
     @Override
@@ -93,6 +131,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnInfoWindowCloseListener(this);
 
         if (!checkPermission())
             requestPermission();
@@ -117,7 +156,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         mMap.setMinZoomPreference(13);
         mMap.setMaxZoomPreference(20);
         mMap.setOnMarkerClickListener(this);
-        mMap.setOnCameraMoveListener(this);
+        mMap.setOnCameraIdleListener(this);
         mMap.getUiSettings().setRotateGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -134,7 +173,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         for (Runnable runnable : runnables)
             runnable.run();
-        MainActivity mainActivity = (MainActivity)getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setRouteReadyListener(this);
     }
 
@@ -142,6 +181,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         for (Marker marker : markerSightMap.keySet())
             marker.remove();
         markerSightMap.clear();
+    }
+
+    public void resetPolyLineWithNewLocation(){
+        track.remove();
     }
 
     public void addSight(final Sight sight) {
@@ -157,7 +200,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public void addSightInternal(Sight sight) {
-        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(getContext());
+        customInfoWindow = new CustomInfoWindowAdapter(getContext());
         mMap.setInfoWindowAdapter(customInfoWindow);
         MarkerOptions options = null;
 
@@ -175,8 +218,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         Marker marker = mMap.addMarker(options);
         marker.setTag(sight);
-//        marker.showInfoWindow();
-
         markerSightMap.put(marker, sight);
     }
 
@@ -200,7 +241,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         return route;
     }
 
-    public void deleteRoute(){
+    public void deleteRoute() {
         this.route = null;
     }
 
@@ -212,13 +253,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public android.location.Location getGps(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         // getting GPS status
         boolean isGPSEnabled = false;
-        if (locationManager != null) {
+        if (locationManager != null)
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        }
 
         if (isGPSEnabled) {
             if (location == null) {
@@ -239,7 +279,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
             }
         }
-//        AppContext.getInstance(getContext()).getFeedbackManager().onGPSLost(getContext());
         return null;
     }
 
@@ -258,8 +297,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         polyOptions.color(Color.BLUE);
         polyOptions.width(5);
         polyOptions.addAll(list);
-
-//        mMap.clear();
         polyline = mMap.addPolyline(polyOptions);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -267,9 +304,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             builder.include(latLng);
     }
 
-    public void deletePolyLinesOnMap(){
-        polyline.remove();
-        track.setPoints(new ArrayList<>());
+    public void deletePolyLinesOnMap() {
+        if (polyline != null) {
+            polyline.remove();
+            track.setPoints(new ArrayList<>());
+        }
     }
 
     public void drawPolyLineOnMap(LatLng latLng) {
@@ -283,8 +322,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+        if (isPaused)
+            return;
         drawPolyLineOnMap(new LatLng(location.getLatitude(), location.getLongitude()));
         checkForNearSight(location);
+        updateDirection();
     }
 
     private void checkForNearSight(Location location) {
@@ -307,6 +349,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         marker.showInfoWindow();
         marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+        AppContext.getInstance(getContext()).getFeedbackManager().onNearbySight(getContext());
 
         currentRouteIndex++;
         AppContext.getInstance(getContext()).getRouteManager().
@@ -353,10 +396,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     @Override
-    public void onCameraMove() {
-    }
-
-    @Override
     public boolean onMarkerClick(Marker marker) {
         return false;
     }
@@ -371,16 +410,74 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void RouteReady(Route route) {
-        AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
-            @Override
-            public void onReceivedDirections(List<LatLng> directionList) {
-                drawPolyLineOnMap(directionList);
+        if (checkPermission()) {
+            if (location == null) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        0, 0, this, null);
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
+            AppContext.getInstance(getContext()).getRouteManager().getDirections(new LatLng(location.getLatitude(), location.getLongitude()), route, new DirectionsListener() {
+                @Override
+                public void onReceivedDirections(List<LatLng> directionList) {
+                    drawPolyLineOnMap(directionList);
+                }
 
-            @Override
-            public void onError(Error error) {
-                Log.e("oh no ", "oh no");
+                @Override
+                public void onError(Error error) {
+                    Log.e("FUCKM", "oh no");
+                }
+            });
+        } else {
+            requestPermission();
+            Log.e("FUCKM", "oh not this");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSIONS_ID) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                AppContext.getInstance(getContext())
+                        .getFeedbackManager()
+                        .onError(getContext(), String.valueOf("GPS not enabled!"));
             }
-        });
+        }
+    }
+
+    private void updateDirection() {
+        if (nextSight == null) {
+            arrow.setVisibility(View.INVISIBLE);
+            return;
+        } else if (arrow.getVisibility() == View.INVISIBLE)
+            arrow.setVisibility(View.VISIBLE);
+
+        Sight sight = nextSight.getValue();
+        if (location == null || sight == null)
+            return;
+        Location sightLocation = new Location("");
+        sightLocation.setLatitude(sight.getLatitude());
+        sightLocation.setLongitude(sight.getLongitude());
+
+        float bearing = location.bearingTo(sightLocation) - mMap.getCameraPosition().bearing;
+        arrow.setRotation(bearing);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        float bearing = mMap.getCameraPosition().bearing;
+        if (areEqualFloat(bearing, lastCameraBearing))
+            return;
+        lastCameraBearing = bearing;
+        updateDirection();
+    }
+
+    private boolean areEqualFloat(float a, float b) {
+        return (Math.abs((a / b) - 1.0) < 0.001);
+    }
+
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        customInfoWindow.resetRefresh();
     }
 }

@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     private final static String TAG = CustomInfoWindowAdapter.class.getSimpleName();
 
+    private boolean isRefreshed;
     private Context context;
 
     public CustomInfoWindowAdapter(Context ctx) {
@@ -28,8 +29,14 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
+
+    public void resetRefresh(){
+        isRefreshed = false;
+    }
+
     @Override
     public View getInfoContents(Marker marker) {
+
         View view = ((Activity) context).getLayoutInflater()
                 .inflate(R.layout.popup_maps, null);
         Sight sight = (Sight) marker.getTag();
@@ -37,7 +44,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         String addressString = sight.getAddress();
         ImageView imageView = view.findViewById(R.id.imageView3);
         if (sight.getType().equals("Blindwall")) {
-            tryImages(0, sight, imageView);
+            tryImages(0, sight, imageView, marker);
         } else {
             String imageUrl = "" + sight.getImages().get(0);
             int resid = context.getResources().getIdentifier(context.getPackageName()
@@ -54,16 +61,26 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return view;
     }
 
-    private void tryImages(int index, Sight sight, ImageView view) {
-        Picasso.get().load(sight.getImages().get(index)).
-                placeholder(R.drawable.placeholder).into(view, new Callback() {
+    private void tryImages(int index, Sight sight, ImageView view, Marker marker) {
+        String wronglyFormatedUrl = sight.getImages().get(index);
+        int extIndex = wronglyFormatedUrl.lastIndexOf(".");
+        String plainUrl = wronglyFormatedUrl.substring(0, extIndex);
+        String extension = wronglyFormatedUrl.substring(extIndex).toLowerCase();
+        String newUrl = plainUrl+extension;
+        Picasso.get().load(newUrl).placeholder(R.drawable.placeholder).into(view, new Callback() {
             @Override
             public void onSuccess() {
-                Log.d(TAG, "onSuccess: " + sight.getTitle());
+
+                if(!isRefreshed) {
+                    isRefreshed = true;
+                    Log.d(TAG, "onSuccess: " + sight.getTitle());
+                    marker.showInfoWindow();
+                }
             }
 
             @Override
             public void onError(Exception e) {
+
                 Log.d(TAG, "onError: " + sight.getTitle());
             }
         });

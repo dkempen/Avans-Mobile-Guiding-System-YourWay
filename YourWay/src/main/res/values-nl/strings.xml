@@ -42,6 +42,39 @@
         <b>Instellingen:</b>\n
         Je kan de instellingen aanpassen. Als je wilt dat trillen aan staat.
     </string>
+
+    <string name="mapText">
+        <b>Map:</b>\n
+        In deze applicatie kun je een route lopen.
+        Je kan alle punten op de kaart zien die je kan bezoeken.
+        Elke kleur is een route.
+    </string>
+
+    <string name="menuText1">
+        <b>Kaart:</b>\n
+        Open eerst het menu.
+    </string>
+
+    <string name="menuText2">
+        Nadat je het menu hebt geopend. Kun je een route selecteren om een route te starten. Als je alle bezienswaardigheden wilt zien moet je bezienswaardigheden selecteren.
+    </string>
+
+    <string name="routeText">
+        <b>Route:</b>\n
+        In het route menu kun je een route kiezen.
+        De routes gaan verder waar je de laatste keer gebleven was.
+    </string>
+
+    <string name="sightText">
+        <b>Bezienswaardigheden:</b>\n
+        Je kan bezienswaardigheden zien als je er een selecteert krijg je meer informatie over die je drukte.
+    </string>
+
+    <string name="settingText">
+        <b>Instellingen:</b>\n
+         Je kan hier bepalen of je wilt dat je telefoon trilt als je bij een bezienswaardigheid in de buurt komt.
+    </string>
+
     <string name="Vibrate">Trilstand</string>
     <string name="map">Map</string>
     <string name="route">Route</string>
@@ -59,4 +92,6 @@
     <string name="feedbackOnInternetLost">Internet Connectie Verloren</string>
     <string name="feedbackOnRouteFinish">Gefeliciteerd! U heeft de route voltooid!</string>
     <string name="feedbackOnRouteReset">De voortgang van deze route is gereset</string>
+    <string name="mapPauseButton">Pauze</string>
+    <string name="mapResumeButton">Hervat</string>
 </resources>

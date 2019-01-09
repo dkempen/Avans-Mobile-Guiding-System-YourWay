@@ -3,6 +3,7 @@ package com.id.yourway.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -69,18 +70,15 @@ public class MainActivity extends AppCompatActivity {
         helpFragment = new HelpFragment();
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        boolean firstStart = preferences.getBoolean("firstStart", true);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean firstStart = prefs.getBoolean("firststart", true);
+        prefs.edit().putBoolean("firststart", false).apply();
 
         if (firstStart) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             HelpFragment helpFragment = new HelpFragment();
             helpFragment.show(ft, "HELP");
-
-            SharedPreferences preferences1 = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences1.edit();
-            editor.putBoolean("firstStart", false);
         }
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -137,29 +135,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setRouteReadyListener(RouteReadyListener raListener){
+    public void setRouteReadyListener(RouteReadyListener raListener) {
         this.raListener = raListener;
     }
 
+    public void setRouteProgress(Route route){
+        mapFragment.setRoute(route);
+        mapFragment.resetPolyLineWithNewLocation();
 
-    public void setRouteAndSwitchToHome(Route route){
-        fragmentManager.beginTransaction().replace(R.id.fragment,
-                mapFragment).addToBackStack(null).commitAllowingStateLoss();
-        if(raListener != null){
-            raListener.RouteReady(route);
+    }
+
+    public void setRoute(Route route, boolean switchToHome) {
+        if (switchToHome) {
+            fragmentManager.beginTransaction().replace(R.id.fragment,
+                    mapFragment).addToBackStack(null).commitAllowingStateLoss();
+            if (raListener != null)
+                raListener.RouteReady(route);
         }
-        //this.route = route;
         mapFragment.removeMarkers();
-        if(mapFragment.getRoute() != null){
+        if (mapFragment.getRoute() != null) {
             mapFragment.deleteRoute();
             mapFragment.deletePolyLinesOnMap();
         }
         List<Sight> sights = route.getSights();
-        for (Sight sight : sights) {
+        for (Sight sight : sights)
             mapFragment.addSightInternal(sight);
-        }
         mapFragment.setRoute(route);
-        Log.e("hello", "hello");
     }
 
     private void setupToolbar() {
@@ -226,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Sight> getSights() {
         return sights;
+    }
+
+    public MapFragment getMapFragment() {
+        return mapFragment;
     }
 
     public void setToolbarTitle(String title) {
